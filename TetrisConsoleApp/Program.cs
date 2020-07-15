@@ -1,4 +1,6 @@
-﻿namespace TetrisConsoleApp
+﻿using TetrisConsoleApp.Utilities;
+
+namespace TetrisConsoleApp
 {
     class Program
     {

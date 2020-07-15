@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TetrisConsoleApp.AbstractClasses;
 
-namespace TetrisConsoleApp
+namespace TetrisConsoleApp.Utilities
 {
     class AppManager : ControllableMenu
     {
@@ -29,14 +29,14 @@ namespace TetrisConsoleApp
         protected override void Show(int index)
         {
             Console.SetCursorPosition(0, 3);
-            for(int i = 0; i < _menuActions.Count; i++)
+            for (int i = 0; i < _menuActions.Count; i++)
             {
-                if(i == index)
+                if (i == index)
                     ConsoleUtilities.ColorWriteLine($"{_menuActions[i].Item1,16}", ConsoleColor.Black, ConsoleColor.White);
                 else
                     Console.WriteLine($"{_menuActions[i].Item1,-16}" + new string(' ', 20));
             }
-            foreach(string helpString in _helpStrings)
+            foreach (string helpString in _helpStrings)
             {
                 Console.WriteLine(helpString);
             }
@@ -45,7 +45,7 @@ namespace TetrisConsoleApp
         protected override void HandleInput()
         {
             var key = KeyboardHandler.GetDirection();
-            switch(key)
+            switch (key)
             {
                 case KeyCommand.Down:
                     _refresh = true;

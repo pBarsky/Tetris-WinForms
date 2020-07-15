@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using TetrisConsoleApp.Utilities;
 
 namespace TetrisConsoleApp.AbstractClasses
 {
@@ -19,12 +20,12 @@ namespace TetrisConsoleApp.AbstractClasses
             ConsoleUtilities.HideCursor();
             _offset = 0;
             _running = true;
-            while(_running)
+            while (_running)
             {
-                if(stopwatch.ElapsedMilliseconds < 50) continue;
+                if (stopwatch.ElapsedMilliseconds < 50) continue;
 
                 HandleInput();
-                if(_refresh)
+                if (_refresh)
                 {
                     Show(_offset);
                     _refresh = false;

@@ -1,6 +1,7 @@
 ﻿using System;
+using TetrisConsoleApp.Bricks;
 
-namespace TetrisConsoleApp
+namespace TetrisConsoleApp.Boards
 {
     class BoardTester : Board
     {

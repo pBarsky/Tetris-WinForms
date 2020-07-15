@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TetrisConsoleApp
+namespace TetrisConsoleApp.Utilities
 {
     static class ConsoleUtilities
     {

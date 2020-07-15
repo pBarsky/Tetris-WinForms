@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TetrisConsoleApp
+namespace TetrisConsoleApp.Utilities
 {
     enum KeyCommand
     {
@@ -18,9 +18,9 @@ namespace TetrisConsoleApp
         public static KeyCommand GetDirection()
         {
             KeyCommand resultKeyCommand = KeyCommand.None;
-            while(Console.KeyAvailable)
+            while (Console.KeyAvailable)
             {
-                switch(Console.ReadKey(true).Key)
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.LeftArrow:
                         resultKeyCommand = KeyCommand.Left;

@@ -1,4 +1,6 @@
-﻿namespace TetrisConsoleApp
+﻿using TetrisConsoleApp.AbstractClasses;
+
+namespace TetrisConsoleApp.Boards
 {
     class Board
     {
@@ -8,14 +10,16 @@
         public int Width => _width;
         public int Height => _height;
 
-        public string[] Buffer {
-            get {
+        public string[] Buffer
+        {
+            get
+            {
                 string[] buffer = new string[_height + 1];
                 buffer[0] = buffer[_height] = " " + new string('=', _width);
-                for(int i = 1; i < _height; i++)
+                for (int i = 1; i < _height; i++)
                 {
                     buffer[i] += "|";
-                    for(int j = 0; j < _width; j++)
+                    for (int j = 0; j < _width; j++)
                     {
                         buffer[i] += tab[i, j] != 0 ? "#" : " ";
                     }
@@ -33,33 +37,33 @@
 
         public void InsertBrick(Brick brick)
         {
-            for(int i = 0; i < brick.Height; i++)
-                for(int j = 0; j < brick.Width; j++)
-                    if(brick.Shape[i, j] != 0)
+            for (int i = 0; i < brick.Height; i++)
+                for (int j = 0; j < brick.Width; j++)
+                    if (brick.Shape[i, j] != 0)
                         tab[brick.PosY + i, brick.PosX + j] = brick.Shape[i, j];
         }
 
         public void DeepClear()
         {
-            for(int i = 0; i < _height; i++)
-                for(int j = 0; j < _width; j++)
+            for (int i = 0; i < _height; i++)
+                for (int j = 0; j < _width; j++)
                     tab[i, j] = 0;
         }
 
         public void ShallowClear()
         {
-            for(int i = 0; i < _height; i++)
-                for(int j = 0; j < _width; j++)
-                    if(tab[i, j] == 1)
+            for (int i = 0; i < _height; i++)
+                for (int j = 0; j < _width; j++)
+                    if (tab[i, j] == 1)
                         tab[i, j] = 0;
         }
         public bool IsColliding(Brick brick, int offsetX, int offsetY)
         {
-            for(int i = 0; i < brick.Height; i++)
-                for(int j = 0; j < brick.Width; j++)
+            for (int i = 0; i < brick.Height; i++)
+                for (int j = 0; j < brick.Width; j++)
                 {
-                    if(brick.Shape[i, j] != 1) continue;
-                    if(i + brick.PosY + offsetY < 0 ||
+                    if (brick.Shape[i, j] != 1) continue;
+                    if (i + brick.PosY + offsetY < 0 ||
                        i + brick.PosY + offsetY >= _height ||
                        j + brick.PosX + offsetX < 0 ||
                        j + brick.PosX + offsetX >= _width ||
@@ -70,24 +74,24 @@
         }
         public void FreezeBrick(Brick brick)
         {
-            for(int i = 0; i < brick.Height; i++)
-                for(int j = 0; j < brick.Width; j++)
-                    if(brick.Shape[i, j] != 0)
+            for (int i = 0; i < brick.Height; i++)
+                for (int j = 0; j < brick.Width; j++)
+                    if (brick.Shape[i, j] != 0)
                         tab[brick.PosY + i, brick.PosX + j] = 2;
         }
 
         public int CheckBoard()
         {
             int counter = 0;
-            for(int i = 0; i < _height; i++)
+            for (int i = 0; i < _height; i++)
             {
-                for(int j = 0; j < _width; j++)
+                for (int j = 0; j < _width; j++)
                 {
-                    if(tab[i, j] != 2)
+                    if (tab[i, j] != 2)
                         break;
                     counter++;
                 }
-                if(counter == _width)
+                if (counter == _width)
                     return i;
                 counter = 0;
             }
@@ -98,10 +102,10 @@
         {
             int level = CheckBoard();
             int score = 1;
-            while(level != -1)
+            while (level != -1)
             {
-                for(int i = level - 1; i >= 0; i--)
-                    for(int j = 0; j < _width; j++)
+                for (int i = level - 1; i >= 0; i--)
+                    for (int j = 0; j < _width; j++)
                         tab[i + 1, j] = tab[i, j];
                 level = CheckBoard();
                 score *= multiplier;

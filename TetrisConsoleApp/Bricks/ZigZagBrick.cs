@@ -1,4 +1,6 @@
-﻿namespace TetrisConsoleApp
+﻿using TetrisConsoleApp.AbstractClasses;
+
+namespace TetrisConsoleApp.Bricks
 {
     class ZigZagBrick : Brick
     {

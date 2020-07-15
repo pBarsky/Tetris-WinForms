@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using TetrisConsoleApp.AbstractClasses;
 
-namespace TetrisConsoleApp
+namespace TetrisConsoleApp.Utilities
 {
     class ScoreboardManager : ControllableMenu
     {
@@ -23,7 +23,7 @@ namespace TetrisConsoleApp
 
         public ScoreboardManager(bool readData = true)
         {
-            if(readData)
+            if (readData)
                 RefreshData();
             _running = true;
         }
@@ -33,18 +33,18 @@ namespace TetrisConsoleApp
             try
             {
                 string[] lines = File.ReadAllLines(FilePath);
-                foreach(string line in lines)
+                foreach (string line in lines)
                 {
                     string[] keyVal = line.Split(':');
                     scores.Add(new Tuple<string, int>(keyVal[0], int.TryParse(keyVal[1], out int score) ? score : 0));
                 }
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Console.WriteLine("COULD NOT OPEN SCORES FILE.");
                 Console.WriteLine(e.Message);
             }
-            if(!sorted) return scores;
+            if (!sorted) return scores;
             var scoreSorting = scores.OrderByDescending(row => row.Item2);
             return scoreSorting.ToList();
 
@@ -67,18 +67,18 @@ namespace TetrisConsoleApp
             // TODO: Implement pagination. Please, just do it.
             string output = "";
             Console.SetCursorPosition(0, 0);
-            for(int i = offset; i < offset + Range && i < _records.Count; i++)
+            for (int i = offset; i < offset + Range && i < _records.Count; i++)
             {
                 (string name, int score) = _records[i];
                 output += ($"{i + 1,3}.{name,-16}:{score,10}\n");
             }
-            foreach(string helpString in _helpStrings)
+            foreach (string helpString in _helpStrings)
             {
                 output += helpString + new string(' ', helpString.Length) + '\n';
             }
             // newN -> number of rows left to 'cover', so that old data doesnt remain visible
             int newN = _records.Count - offset < 10 ? 10 : 0;
-            for(int i = 0; i < newN; i++)
+            for (int i = 0; i < newN; i++)
                 output += new string(' ', 64) + '\n';
             Console.WriteLine(output);
         }
@@ -87,17 +87,17 @@ namespace TetrisConsoleApp
         protected override void HandleInput()
         {
             var key = KeyboardHandler.GetDirection();
-            switch(key)
+            switch (key)
             {
                 case KeyCommand.Down:
-                    if(_offset + Range < _records.Count)
+                    if (_offset + Range < _records.Count)
                     {
                         _offset += Range;
                         _refresh = true;
                     }
                     break;
                 case KeyCommand.Up:
-                    if(_offset - Range >= 0)
+                    if (_offset - Range >= 0)
                     {
                         _offset -= Range;
                         _refresh = true;
