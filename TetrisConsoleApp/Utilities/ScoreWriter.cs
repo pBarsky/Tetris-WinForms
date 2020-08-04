@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace TetrisConsoleApp.Utilities
+namespace GameEngine.Utilities
 {
     class ScoreWriter : ScoreboardManager
     {

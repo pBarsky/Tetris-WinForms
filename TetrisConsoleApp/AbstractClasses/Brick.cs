@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace TetrisConsoleApp.AbstractClasses
+namespace GameEngine.AbstractClasses
 {
-    abstract class Brick
+    public abstract class Brick
     {
         protected int posX, posY; //polozenie klocka
         public string Name { get; }

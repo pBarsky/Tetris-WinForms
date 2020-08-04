@@ -1,6 +1,6 @@
-﻿using TetrisConsoleApp.AbstractClasses;
+﻿using GameEngine.AbstractClasses;
 
-namespace TetrisConsoleApp.Bricks
+namespace GameEngine.Bricks
 {
     class BeamBrick : Brick
     {

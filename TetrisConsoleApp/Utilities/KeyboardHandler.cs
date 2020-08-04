@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TetrisConsoleApp.Utilities
+namespace GameEngine.Utilities
 {
     enum KeyCommand
     {
@@ -18,30 +18,30 @@ namespace TetrisConsoleApp.Utilities
         public static KeyCommand GetDirection()
         {
             KeyCommand resultKeyCommand = KeyCommand.None;
-            while (Console.KeyAvailable)
-            {
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.LeftArrow:
-                        resultKeyCommand = KeyCommand.Left;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        resultKeyCommand = KeyCommand.Right;
-                        break;
-                    case ConsoleKey.UpArrow:
-                        resultKeyCommand = KeyCommand.Up;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        resultKeyCommand = KeyCommand.Down;
-                        break;
-                    case ConsoleKey.Enter:
-                        resultKeyCommand = KeyCommand.Enter;
-                        break;
-                    case ConsoleKey.Escape:
-                        resultKeyCommand = KeyCommand.Escape;
-                        break;
-                }
-            }
+            // while (Console.KeyAvailable)
+            // {
+            //     switch (Console.ReadKey(true).Key)
+            //     {
+            //         case ConsoleKey.LeftArrow:
+            //             resultKeyCommand = KeyCommand.Left;
+            //             break;
+            //         case ConsoleKey.RightArrow:
+            //             resultKeyCommand = KeyCommand.Right;
+            //             break;
+            //         case ConsoleKey.UpArrow:
+            //             resultKeyCommand = KeyCommand.Up;
+            //             break;
+            //         case ConsoleKey.DownArrow:
+            //             resultKeyCommand = KeyCommand.Down;
+            //             break;
+            //         case ConsoleKey.Enter:
+            //             resultKeyCommand = KeyCommand.Enter;
+            //             break;
+            //         case ConsoleKey.Escape:
+            //             resultKeyCommand = KeyCommand.Escape;
+            //             break;
+            //     }
+            // }
             return resultKeyCommand;
         }
     }

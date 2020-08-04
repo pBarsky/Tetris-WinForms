@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using TetrisConsoleApp.Utilities;
+using GameEngine.Utilities;
 
-namespace TetrisConsoleApp.AbstractClasses
+namespace GameEngine.AbstractClasses
 {
-    abstract class ControllableMenu
+    public abstract class ControllableMenu
     {
         protected bool _running;
         protected bool _refresh;

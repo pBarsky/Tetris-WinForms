@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TetrisConsoleApp.AbstractClasses;
+using GameEngine.AbstractClasses;
 
-namespace TetrisConsoleApp.Bricks
+namespace GameEngine.Bricks
 {
     class BricksQueue
     {

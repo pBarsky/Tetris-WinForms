@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
-using TetrisConsoleApp.AbstractClasses;
-using TetrisConsoleApp.Bricks;
-using TetrisConsoleApp.Utilities;
-using TetrisConsoleApp.Boards;
+using System.Windows.Forms;
+using GameEngine.AbstractClasses;
+using GameEngine.Boards;
+using GameEngine.Bricks;
+using GameEngine.Utilities;
 
-namespace TetrisConsoleApp
+namespace GameEngine
 {
+    // TODO reference form to build view from here
 
-    class Game
+    public class Game
     {
         private Brick _currentBrick;
-        private Board _board;
+        private readonly Board _board;
         private ScoreWriter _scoreWriter;
         private bool _alive = true;
         private bool _hasChanged;
@@ -21,6 +24,7 @@ namespace TetrisConsoleApp
         private int _score;
         private static List<Brick> _allAvailableBricks;
         private BricksQueue _bricksQueue = new BricksQueue();
+
         private string[] _helpStrings = { $"\t{"UpArrow",-10} -> ROTATE", $"\t{"DownArrow",-10} -> GO DOWN (+1 POINT)",
             $"\t{"LeftArrow",-10} -> MOVE LEFT", $"\t{"RightArrow",-10} -> MOVE RIGHT", $"\t{"ESC",-10} -> GIVE UP"};
 
@@ -32,27 +36,12 @@ namespace TetrisConsoleApp
                 .Select(t => (Brick)Activator.CreateInstance(t));
             _allAvailableBricks = bricks.ToList();
             _scoreWriter = new ScoreWriter();
+
         }
 
         private void Show()
         {
-            string output = "";
-            string[] buffer = _board.Buffer;
-            string[] brickQueueBuffer = _bricksQueue.Buffer;
-            buffer[0] += "\tScore: " + _score.ToString() + "\n";
-            output += buffer[0];
-            ClearBricksQueueBuffer();
-            Console.SetCursorPosition(0, 0);
-            for (int i = 1; i < buffer.Length; i++)
-            {
-                output += buffer[i];
-                if (i <= brickQueueBuffer.Length)
-                    output += '\t' + brickQueueBuffer[i - 1];
-                if (i <= _helpStrings.Length)
-                    output += _helpStrings[i - 1];
-                output += '\n';
-            }
-            Console.Write(output);
+
         }
 
         private void ClearBricksQueueBuffer()
@@ -94,6 +83,23 @@ namespace TetrisConsoleApp
                 stopwatch.Restart();
             }
             GameOver();
+        }
+
+        public void Prepare()
+        {
+            SeedQueue();
+            NextBrick();
+        }
+        public Board Step(bool down)
+        {
+            _board.ShallowClear();
+            HandlePlayerMovement(KeyboardHandler.GetDirection(), true);
+            if (down)
+            {
+                _board.ShallowClear();
+                HandlePlayerMovement(KeyCommand.Down);
+            }
+            return _board;
         }
 
         private void GameOver()

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TetrisConsoleApp.AbstractClasses;
+using GameEngine.AbstractClasses;
 
-namespace TetrisConsoleApp.Utilities
+namespace GameEngine.Utilities
 {
     class ScoreboardManager : ControllableMenu
     {

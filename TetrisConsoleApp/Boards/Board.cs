@@ -1,14 +1,16 @@
-﻿using TetrisConsoleApp.AbstractClasses;
+﻿using GameEngine.AbstractClasses;
 
-namespace TetrisConsoleApp.Boards
+namespace GameEngine.Boards
 {
-    class Board
+    public class Board
     {
         protected int[,] tab;
         private readonly int _width;
         private readonly int _height;
         public int Width => _width;
         public int Height => _height;
+
+        public int[,] Tab => tab;
 
         public string[] Buffer
         {

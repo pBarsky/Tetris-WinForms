@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using TetrisConsoleApp.AbstractClasses;
+using GameEngine.AbstractClasses;
 
-namespace TetrisConsoleApp.Utilities
+namespace GameEngine.Utilities
 {
-    class AppManager : ControllableMenu
+    public class AppManager : ControllableMenu
     {
         private Game _game;
         private ScoreboardManager _scoreboardManager;
-        private readonly List<Tuple<string, Action>> _menuActions = new List<Tuple<string, Action>>();
+        public readonly List<Tuple<string, Action>> MenuActions = new List<Tuple<string, Action>>();
         private readonly string[] _helpStrings = {
             $"\n{"DownArrow",-10} -> scroll down",
             $"{"UpArrow",-10} -> scroll up",
@@ -17,11 +17,11 @@ namespace TetrisConsoleApp.Utilities
         };
         public AppManager()
         {
-            _game = new Game();
-            _scoreboardManager = new ScoreboardManager();
-            _menuActions.Add(new Tuple<string, Action>("Play", _game.Play));
-            _menuActions.Add(new Tuple<string, Action>("Scoreboard", _scoreboardManager.PrepareThenRun));
-            _menuActions.Add(new Tuple<string, Action>("Exit", () => _running = false));
+            // _game = new Game();
+            // _scoreboardManager = new ScoreboardManager();
+            // MenuActions.Add(new Tuple<string, Action>("Play", _game.Play));
+            // MenuActions.Add(new Tuple<string, Action>("Scoreboard", _scoreboardManager.PrepareThenRun));
+            // MenuActions.Add(new Tuple<string, Action>("Exit", () => _running = false));
             _running = true;
             _refresh = true;
         }
@@ -29,12 +29,12 @@ namespace TetrisConsoleApp.Utilities
         protected override void Show(int index)
         {
             Console.SetCursorPosition(0, 3);
-            for (int i = 0; i < _menuActions.Count; i++)
+            for (int i = 0; i < MenuActions.Count; i++)
             {
                 if (i == index)
-                    ConsoleUtilities.ColorWriteLine($"{_menuActions[i].Item1,16}", ConsoleColor.Black, ConsoleColor.White);
+                    ConsoleUtilities.ColorWriteLine($"{MenuActions[i].Item1,16}", ConsoleColor.Black, ConsoleColor.White);
                 else
-                    Console.WriteLine($"{_menuActions[i].Item1,-16}" + new string(' ', 20));
+                    Console.WriteLine($"{MenuActions[i].Item1,-16}" + new string(' ', 20));
             }
             foreach (string helpString in _helpStrings)
             {
@@ -49,15 +49,15 @@ namespace TetrisConsoleApp.Utilities
             {
                 case KeyCommand.Down:
                     _refresh = true;
-                    _offset = ++_offset % _menuActions.Count;
+                    _offset = ++_offset % MenuActions.Count;
                     break;
                 case KeyCommand.Up:
                     _refresh = true;
-                    _offset = _offset == 0 ? _menuActions.Count - 1 : --_offset % _menuActions.Count;
+                    _offset = _offset == 0 ? MenuActions.Count - 1 : --_offset % MenuActions.Count;
                     break;
                 case KeyCommand.Enter:
                     _refresh = true;
-                    _menuActions[_offset].Item2();
+                    MenuActions[_offset].Item2();
                     Console.Clear();
                     break;
                 case KeyCommand.Escape:

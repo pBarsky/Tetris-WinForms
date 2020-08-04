@@ -1,6 +1,6 @@
-﻿using TetrisConsoleApp.Utilities;
+﻿using GameEngine.Utilities;
 
-namespace TetrisConsoleApp
+namespace GameEngine
 {
     class Program
     {
