@@ -2,7 +2,7 @@
 
 namespace GameEngine.Utilities
 {
-    enum KeyCommand
+    public enum KeyCommand
     {
         Down = 0,
         Left = 1,
@@ -17,6 +17,7 @@ namespace GameEngine.Utilities
     {
         public static KeyCommand GetDirection()
         {
+            //TODO: CHANGE FOR WINFORMS
             KeyCommand resultKeyCommand = KeyCommand.None;
             // while (Console.KeyAvailable)
             // {

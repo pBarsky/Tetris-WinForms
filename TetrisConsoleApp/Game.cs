@@ -18,15 +18,18 @@ namespace GameEngine
         private Brick _currentBrick;
         private readonly Board _board;
         private ScoreWriter _scoreWriter;
-        private bool _alive = true;
-        private bool _hasChanged;
+        public bool Alive { get; private set; } = true;
+        public bool HasChanged { get; private set; }
         private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private int _score;
+        public int Score { get; private set; }
         private static List<Brick> _allAvailableBricks;
-        private BricksQueue _bricksQueue = new BricksQueue();
+        public BricksQueue QueueBricks { get; } = new BricksQueue();
 
-        private string[] _helpStrings = { $"\t{"UpArrow",-10} -> ROTATE", $"\t{"DownArrow",-10} -> GO DOWN (+1 POINT)",
-            $"\t{"LeftArrow",-10} -> MOVE LEFT", $"\t{"RightArrow",-10} -> MOVE RIGHT", $"\t{"ESC",-10} -> GIVE UP"};
+        public string[] HelpStrings { get; } =
+        {
+            $"{"UpArrow",-10} -> ROTATE", $"{"DownArrow",-10} -> GO DOWN +1",
+            $"{"LeftArrow",-10} -> MOVE LEFT", $"{"RightArrow",-10} -> MOVE RIGHT", $"{"ESC",-10} -> GIVE UP"
+        };
 
         public Game(int boardHeight = 20, int boardWidth = 10)
         {
@@ -36,11 +39,6 @@ namespace GameEngine
                 .Select(t => (Brick)Activator.CreateInstance(t));
             _allAvailableBricks = bricks.ToList();
             _scoreWriter = new ScoreWriter();
-
-        }
-
-        private void Show()
-        {
 
         }
 
@@ -60,12 +58,11 @@ namespace GameEngine
             ConsoleUtilities.HideCursor();
             SeedQueue();
             NextBrick();
-            Show();
-            _alive = true;
+            Alive = true;
             Stopwatch stopwatch = new Stopwatch();
             long millisecondsPassed = 0L;
             stopwatch.Start();
-            while (_alive)
+            while (Alive)
             {
                 if (stopwatch.ElapsedMilliseconds <= 100) continue;
                 _board.ShallowClear();
@@ -76,9 +73,8 @@ namespace GameEngine
                     HandlePlayerMovement(KeyCommand.Down);
                     millisecondsPassed = 0L;
                 }
-                if (_hasChanged)
-                    Show();
-                _hasChanged = false;
+                if (HasChanged)
+                    HasChanged = false;
                 millisecondsPassed += stopwatch.ElapsedMilliseconds;
                 stopwatch.Restart();
             }
@@ -90,10 +86,11 @@ namespace GameEngine
             SeedQueue();
             NextBrick();
         }
-        public Board Step(bool down)
+        public Board Step(bool down, KeyCommand key)
         {
             _board.ShallowClear();
-            HandlePlayerMovement(KeyboardHandler.GetDirection(), true);
+            HasChanged = false;
+            HandlePlayerMovement(key, true);
             if (down)
             {
                 _board.ShallowClear();
@@ -104,11 +101,11 @@ namespace GameEngine
 
         private void GameOver()
         {
-            Console.WriteLine($"\n\nGAME OVER\n\tYOU'VE SCORED: {_score} POINTS!!");
+            Console.WriteLine($"\n\nGAME OVER\n\tYOU'VE SCORED: {Score} POINTS!!");
             ConsoleUtilities.ShowCursor();
             Console.WriteLine("Please enter your name: ");
             ConsoleUtilities.HideCursor();
-            _scoreWriter.SaveScore(Console.ReadLine(), _score);
+            _scoreWriter.SaveScore(Console.ReadLine(), Score);
             Console.WriteLine("RETRY? (y\\n)");
             while (true)
             {
@@ -131,9 +128,9 @@ namespace GameEngine
 
         private void RestartGame()
         {
-            _score = 0;
+            Score = 0;
             _board.DeepClear();
-            _bricksQueue.Clear();
+            QueueBricks.Clear();
             Play();
         }
 
@@ -144,23 +141,23 @@ namespace GameEngine
                 case KeyCommand.Down:
                     if (!_board.IsColliding(_currentBrick, 0, 1))
                     {
-                        _hasChanged = true;
+                        HasChanged = true;
                         _currentBrick.MoveDown();
                         if (fastForward)
-                            _score += 1;
+                            Score += 1;
                         _board.InsertBrick(_currentBrick);
                     }
                     else
                     {
                         _board.FreezeBrick(_currentBrick);
-                        _score += _board.Gravitate(_board.Width);
+                        Score += _board.Gravitate(_board.Width);
                         NextBrick();
                     }
                     break;
                 case KeyCommand.Left:
                     if (!_board.IsColliding(_currentBrick, -1, 0))
                     {
-                        _hasChanged = true;
+                        HasChanged = true;
                         _currentBrick.MoveLeft();
                         _board.InsertBrick(_currentBrick);
                     }
@@ -168,7 +165,7 @@ namespace GameEngine
                 case KeyCommand.Right:
                     if (!_board.IsColliding(_currentBrick, 1, 0))
                     {
-                        _hasChanged = true;
+                        HasChanged = true;
                         _currentBrick.MoveRight();
                         _board.InsertBrick(_currentBrick);
                     }
@@ -177,7 +174,7 @@ namespace GameEngine
                     _currentBrick.DoRotate(false);
                     if (!_board.IsColliding(_currentBrick, 0, 0))
                     {
-                        _hasChanged = true;
+                        HasChanged = true;
                         _board.InsertBrick(_currentBrick);
                     }
                     else
@@ -186,18 +183,18 @@ namespace GameEngine
                     }
                     break;
                 case KeyCommand.Escape:
-                    _alive = false;
+                    Alive = false;
                     break;
             }
         }
 
         private void NextBrick()
         {
-            _currentBrick = _bricksQueue.Dequeue();
+            _currentBrick = QueueBricks.Dequeue();
             EnqueueNewBrick();
             _currentBrick.RestartPosition(_random.Next(_board.Width - _currentBrick.Width));
             if (_board.IsColliding(_currentBrick, 0, 0))
-                _alive = false;
+                Alive = false;
         }
 
         private void SeedQueue(int size = 3)
@@ -208,7 +205,7 @@ namespace GameEngine
 
         private void EnqueueNewBrick()
         {
-            _bricksQueue.Enqueue(_allAvailableBricks[_random.Next(_allAvailableBricks.Count)].DeepCopy());
+            QueueBricks.Enqueue(_allAvailableBricks[_random.Next(_allAvailableBricks.Count)].DeepCopy());
         }
     }
 }

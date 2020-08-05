@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using GameEngine.AbstractClasses;
 
 namespace GameEngine.Bricks
 {
-    class BricksQueue
+    public class BricksQueue : IEnumerable<Brick>
     {
+        public Queue<Brick> BricksQueue1 { get; }
 
-
-        private Queue<Brick> _bricksQueue;
         public string[] Buffer
         {
             get
             {
-                int height = _bricksQueue.Sum(brick => brick.Height) + _bricksQueue.Count;
+                int height = BricksQueue1.Sum(brick => brick.Height) + BricksQueue1.Count;
                 string[] buffer = new string[height];
                 int lineCounter = 0;
                 int brickCounter = 0;
-                foreach (Brick brick in _bricksQueue)
+                foreach (Brick brick in BricksQueue1)
                 {
                     buffer[lineCounter++] = $"Brick {++brickCounter}.:";
                     foreach (string s in brick.Buffer)
@@ -31,22 +31,32 @@ namespace GameEngine.Bricks
 
         public BricksQueue()
         {
-            _bricksQueue = new Queue<Brick>();
+            BricksQueue1 = new Queue<Brick>();
         }
 
         public void Enqueue(Brick brick)
         {
-            _bricksQueue.Enqueue(brick);
+            BricksQueue1.Enqueue(brick);
         }
 
         public Brick Dequeue()
         {
-            return _bricksQueue.Dequeue();
+            return BricksQueue1.Dequeue();
         }
 
         public void Clear()
         {
-            _bricksQueue.Clear();
+            BricksQueue1.Clear();
+        }
+
+        public IEnumerator<Brick> GetEnumerator()
+        {
+            return BricksQueue1.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
