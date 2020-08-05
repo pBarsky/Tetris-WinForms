@@ -16,9 +16,6 @@ namespace View
         public MainMenu()
         {
             InitializeComponent();
-            // FormBorderStyle = FormBorderStyle.FixedDialog;
-            // MaximizeBox = false;
-            // MinimizeBox = false;
         }
 
         private void playButton_Click(object sender, EventArgs e)
@@ -27,6 +24,11 @@ namespace View
             frm.FormClosing += delegate { this.Show(); };
             frm.Show();
             this.Hide();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

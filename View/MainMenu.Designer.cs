@@ -35,31 +35,35 @@
             // 
             // playButton
             // 
-            this.playButton.Location = new System.Drawing.Point(207, 157);
+            this.playButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.playButton.Location = new System.Drawing.Point(230, 99);
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(308, 58);
             this.playButton.TabIndex = 0;
-            this.playButton.Text = "button1";
+            this.playButton.Text = "Play";
             this.playButton.UseVisualStyleBackColor = true;
             this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // scoreboardButton
             // 
-            this.scoreboardButton.Location = new System.Drawing.Point(207, 249);
+            this.scoreboardButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.scoreboardButton.Location = new System.Drawing.Point(230, 239);
             this.scoreboardButton.Name = "scoreboardButton";
             this.scoreboardButton.Size = new System.Drawing.Size(308, 58);
             this.scoreboardButton.TabIndex = 1;
-            this.scoreboardButton.Text = "button2";
+            this.scoreboardButton.Text = "Scores";
             this.scoreboardButton.UseVisualStyleBackColor = true;
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(207, 344);
+            this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.exitButton.Location = new System.Drawing.Point(230, 390);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(308, 58);
             this.exitButton.TabIndex = 2;
-            this.exitButton.Text = "button3";
+            this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
             // MainMenu
             // 

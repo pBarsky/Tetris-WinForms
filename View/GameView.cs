@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GameEngine;
+using GameEngine.AbstractClasses;
 using GameEngine.Boards;
 using GameEngine.Utilities;
 
@@ -15,47 +16,148 @@ namespace View
 {
     public partial class GameView : BasicForm
     {
-        private Game _game = new Game();
+        private readonly Game _game = new Game();
         private Board _board = null;
-        private int elapsedFrames = 0;
-        private SolidBrush _brush = new SolidBrush(Color.White);
-        private Pen _pen = new Pen(new SolidBrush(Color.Red), 2);
-        private int _boxMarginVertical = 10;
-        private int _boxMarginHorizontal = 10;
-        private int _boxWidth = 10;
-        private int _boxHeight = 10;
+        private int _elapsedFrames = 0;
+        private readonly SolidBrush _brush = new SolidBrush(Color.White);
+        private readonly Pen _pen = new Pen(new SolidBrush(Color.Red), 2);
+        private const int BoxMarginVertical = 10;
+        private const int BoxMarginHorizontal = 10;
+        private const int BoxWidth = 10;
+        private const int BoxHeight = 10;
         private int _scaleFactor = 2;
+        private KeyCommand _currentKey = KeyCommand.None;
+        private readonly Font _myFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
         public GameView()
         {
             InitializeComponent();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             _game.Prepare();
             timer1_Tick(null, null);
+            PrepareHelpStrings();
         }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
-            elapsedFrames++;
-            var ff = elapsedFrames > 10;
-            _board = _game.Step(ff);
-            pictureBox1.Refresh();
+            if (!_game.Alive)
+            {
+                GameOver();
+            }
+
+            _elapsedFrames++;
+            var ff = _elapsedFrames > 10;
+            if (ff)
+            {
+                _elapsedFrames = 0;
+            }
+
+            _board = _game.Step(ff, _currentKey);
+            if (_game.HasChanged)
+            {
+                pictureBox1.Refresh();
+                pictureBox2.Refresh();
+            }
+
+            UpdateScore();
         }
 
-        private void Draw(Graphics g)
+        private void GameOver()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             for (int i = 0; i < _board.Width; i++)
             {
                 for (int j = 0; j < _board.Height; j++)
                 {
                     if (_board.Tab[j, i] != 0)
-                        g.FillRectangle(_brush, (i + 1) * _boxMarginHorizontal * _scaleFactor, (j + 1) * _boxMarginVertical * _scaleFactor, _boxWidth * _scaleFactor, _boxHeight * _scaleFactor);
-                    g.DrawRectangle(_pen, (i + 1) * _boxMarginHorizontal * _scaleFactor, (j + 1) * _boxMarginVertical * _scaleFactor, _boxWidth * _scaleFactor, _boxHeight * _scaleFactor);
+                        DrawBrick(e, i, j);
+                    DrawBox(e, i, j);
                 }
             }
         }
-
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private void DrawBrick(PaintEventArgs e, int x, int y)
         {
-            Draw(e.Graphics);
+            e.Graphics.FillRectangle(_brush, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
+        }
+        private void DrawBox(PaintEventArgs e, int x, int y)
+        {
+            e.Graphics.DrawRectangle(_pen, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
+        }
+        private void DrawString(string text, PaintEventArgs e, int x, int y)
+        {
+            e.Graphics.DrawString(text, _myFont, _brush, x, y);
+        }
+        private void DrawString(string text, PaintEventArgs e, int x, int y, StringFormat format)
+        {
+            e.Graphics.DrawString(text, _myFont, _brush, x, y, format);
+        }
+        private void GameView_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    _currentKey = KeyCommand.Left;
+                    break;
+                case Keys.Right:
+                    _currentKey = KeyCommand.Right;
+                    break;
+                case Keys.Up:
+                    _currentKey = KeyCommand.Up;
+                    break;
+                case Keys.Down:
+                    _currentKey = KeyCommand.Down;
+                    break;
+                case Keys.Enter:
+                    _currentKey = KeyCommand.Enter;
+                    break;
+                case Keys.Escape:
+                    _currentKey = KeyCommand.Escape;
+                    break;
+            }
+        }
+        private void GameView_KeyUp(object sender, KeyEventArgs e)
+        {
+            _currentKey = KeyCommand.None;
+        }
+        private void pictureBox2_Paint(object sender, PaintEventArgs e)
+        {
+            int brickCount = 0;
+            int y = 0;
+            int offset = 0;
+            int brickDisplayCount = 0;
+            foreach (Brick brick in _game.QueueBricks)
+            {
+                DrawString($"Brick {++brickCount}:", e, 20, y + 20);
+                y += 20;
+                for (int i = 0; i < brick.Width; i++)
+                {
+                    for (int j = 0; j < brick.Height; j++)
+                    {
+                        if (brick.Shape[j, i] != 0)
+                            DrawBrick(e, i, j + offset + brickCount + brickDisplayCount);
+                        DrawBox(e, i, j + offset + brickCount + brickDisplayCount);
+                    }
+                }
+
+                brickDisplayCount++;
+                y += 20 * (1 + brick.Height);
+                offset += brick.Height;
+            }
+        }
+        private void UpdateScore()
+        {
+            label2.Text = $@"{_game.Score}";
+        }
+        private void PrepareHelpStrings()
+        {
+            helpStringsLabel.Text = string.Empty;
+            foreach (var s in _game.HelpStrings)
+            {
+                helpStringsLabel.Text += $"{s}{Environment.NewLine}";
+            }
         }
     }
 }
