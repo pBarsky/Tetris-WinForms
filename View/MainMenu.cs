@@ -28,7 +28,16 @@ namespace View
 
         private void exitButton_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            //if (MessageBox.Show("Want to exit?", "Exit prompt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (YesNoDialog.ShowDialog("Want to exit?") == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void scoreboardButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

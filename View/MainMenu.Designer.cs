@@ -53,6 +53,7 @@
             this.scoreboardButton.TabIndex = 1;
             this.scoreboardButton.Text = "Scores";
             this.scoreboardButton.UseVisualStyleBackColor = true;
+            this.scoreboardButton.Click += new System.EventHandler(this.scoreboardButton_Click);
             // 
             // exitButton
             // 
