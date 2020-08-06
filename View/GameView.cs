@@ -41,6 +41,7 @@ namespace View
         {
             if (!_game.Alive)
             {
+                gameTimer.Enabled = false;
                 GameOver();
             }
 
@@ -63,9 +64,22 @@ namespace View
 
         private void GameOver()
         {
-            throw new NotImplementedException();
-        }
+            using (var form = new InputDialog(_game.Score))
+            {
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    scoreLabel.Text = form.ReturnValue;
+                }
+            }
 
+            //if (MessageBox.Show("Want to play again?", String.Empty, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (YesNoDialog.ShowDialog("Want to play again?") == DialogResult.Yes)
+            {
+                _game.RestartGame();
+                gameTimer.Enabled = true;
+            }
+        }
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             for (int i = 0; i < _board.Width; i++)
@@ -149,7 +163,7 @@ namespace View
         }
         private void UpdateScore()
         {
-            label2.Text = $@"{_game.Score}";
+            scoreLabel.Text = $@"{_game.Score}";
         }
         private void PrepareHelpStrings()
         {

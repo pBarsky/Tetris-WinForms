@@ -13,17 +13,18 @@ namespace View
 {
     public partial class InputDialog : BasicForm
     {
-        public InputDialog()
+        public string ReturnValue { get; private set; }
+        public InputDialog(int score)
         {
             InitializeComponent();
-            AcceptButton = button1;
+            congratulationsLabel.Text = $@"You've scored {score} points!";
         }
 
-        public static string ShowDialog(int score)
+        private void button1_Click(object sender, EventArgs e)
         {
-            InputDialog form = new InputDialog();
-            form.Show();
-            return form.DialogResult == DialogResult.OK ? form.textBox1.Text : string.Empty;
+            ReturnValue = textBox1.Text;
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }
