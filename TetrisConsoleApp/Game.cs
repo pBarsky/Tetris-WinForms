@@ -52,35 +52,6 @@ namespace GameEngine
             }
         }
 
-        public void Play()
-        {
-            Console.Clear();
-            ConsoleUtilities.HideCursor();
-            SeedQueue();
-            NextBrick();
-            Alive = true;
-            Stopwatch stopwatch = new Stopwatch();
-            long millisecondsPassed = 0L;
-            stopwatch.Start();
-            while (Alive)
-            {
-                if (stopwatch.ElapsedMilliseconds <= 100) continue;
-                _board.ShallowClear();
-                HandlePlayerMovement(KeyboardHandler.GetDirection(), true);
-                if (millisecondsPassed > 1000)
-                {
-                    _board.ShallowClear();
-                    HandlePlayerMovement(KeyCommand.Down);
-                    millisecondsPassed = 0L;
-                }
-                if (HasChanged)
-                    HasChanged = false;
-                millisecondsPassed += stopwatch.ElapsedMilliseconds;
-                stopwatch.Restart();
-            }
-            GameOver();
-        }
-
         public void Prepare()
         {
             SeedQueue();
@@ -101,37 +72,16 @@ namespace GameEngine
 
         private void GameOver()
         {
-            Console.WriteLine($"\n\nGAME OVER\n\tYOU'VE SCORED: {Score} POINTS!!");
-            ConsoleUtilities.ShowCursor();
-            Console.WriteLine("Please enter your name: ");
-            ConsoleUtilities.HideCursor();
-            _scoreWriter.SaveScore(Console.ReadLine(), Score);
-            Console.WriteLine("RETRY? (y\\n)");
-            while (true)
-            {
-                var key = Console.ReadKey(true).Key;
-                switch (key)
-                {
-                    case ConsoleKey.Y:
-                        RestartGame();
-                        break;
-                    case ConsoleKey.N:
-                    case ConsoleKey.Escape:
-                        return;
-                    default:
-                        Console.WriteLine("RETRY? (y\\n)");
-                        break;
-                }
-            }
-
+            //_scoreWriter.SaveScore(Console.ReadLine(), Score);
         }
 
-        private void RestartGame()
+        public void RestartGame()
         {
             Score = 0;
+            Alive = true;
             _board.DeepClear();
             QueueBricks.Clear();
-            Play();
+            Prepare();
         }
 
         private void HandlePlayerMovement(KeyCommand direction, bool fastForward = false)
