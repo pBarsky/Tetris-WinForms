@@ -1,6 +1,6 @@
 ﻿namespace View
 {
-    partial class MainMenu
+    partial class MainMenuForm
     {
         /// <summary>
         /// Required designer variable.
@@ -66,7 +66,7 @@
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
-            // MainMenu
+            // MainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,8 +74,8 @@
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.scoreboardButton);
             this.Controls.Add(this.playButton);
-            this.Name = "MainMenu";
-            this.Text = "MainMenu";
+            this.Name = "MainMenuForm";
+            this.Text = "MainMenuForm";
             this.ResumeLayout(false);
 
         }

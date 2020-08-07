@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using GameEngine;
+﻿using GameEngine;
 using GameEngine.AbstractClasses;
 using GameEngine.Boards;
 using GameEngine.Utilities;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace View
 {
@@ -25,7 +19,7 @@ namespace View
         private const int BoxMarginHorizontal = 10;
         private const int BoxWidth = 10;
         private const int BoxHeight = 10;
-        private int _scaleFactor = 2;
+        private readonly int _scaleFactor = 2;
         private KeyCommand _currentKey = KeyCommand.None;
         private readonly Font _myFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
         public GameView()
@@ -87,7 +81,10 @@ namespace View
                 for (int j = 0; j < _board.Height; j++)
                 {
                     if (_board.Tab[j, i] != 0)
+                    {
                         DrawBrick(e, i, j);
+                    }
+
                     DrawBox(e, i, j);
                 }
             }
@@ -151,7 +148,10 @@ namespace View
                     for (int j = 0; j < brick.Height; j++)
                     {
                         if (brick.Shape[j, i] != 0)
+                        {
                             DrawBrick(e, i, j + offset + brickCount + brickDisplayCount);
+                        }
+
                         DrawBox(e, i, j + offset + brickCount + brickDisplayCount);
                     }
                 }
