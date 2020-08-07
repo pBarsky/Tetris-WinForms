@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GameEngine.AbstractClasses;
+using TetrisConsoleApp.Utilities;
 
 namespace GameEngine.Utilities
 {
-    class ScoreboardManager : ControllableMenu
+    public class ScoreboardManager : ControllableMenu
     {
-        private List<Tuple<string, int>> _records;
+        public List<Tuple<string, int>> Records { get; private set; }
         protected const string FilePath = @".\scores.txt";
         private const int Range = 10;
 
@@ -44,32 +45,41 @@ namespace GameEngine.Utilities
                 Console.WriteLine("COULD NOT OPEN SCORES FILE.");
                 Console.WriteLine(e.Message);
             }
+
+            if (scores.Count < 1000)
+            {
+                Seed(scores, 1000 - scores.Count);
+            }
             if (!sorted) return scores;
             var scoreSorting = scores.OrderByDescending(row => row.Item2);
             return scoreSorting.ToList();
 
         }
 
+        private void Seed(List<Tuple<string, int>> scores, int noOfRows)
+        {
+            for (int i = 0; i < noOfRows; i++)
+            {
+                scores.Add(RandomRecordGenerator.GenerateRandomRecord());
+            }
+
+        }
 
         private void RefreshData()
         {
-            _records = ReadScores();
+            Records = ReadScores();
         }
 
-        public void PrepareThenRun()
-        {
-            RefreshData();
-            Run();
-        }
+
         protected override void Show(int offset)
         {
             // memory wise, very bad. May fix later.
             // TODO: Implement pagination. Please, just do it.
             string output = "";
             Console.SetCursorPosition(0, 0);
-            for (int i = offset; i < offset + Range && i < _records.Count; i++)
+            for (int i = offset; i < offset + Range && i < Records.Count; i++)
             {
-                (string name, int score) = _records[i];
+                (string name, int score) = Records[i];
                 output += ($"{i + 1,3}.{name,-16}:{score,10}\n");
             }
             foreach (string helpString in _helpStrings)
@@ -77,7 +87,7 @@ namespace GameEngine.Utilities
                 output += helpString + new string(' ', helpString.Length) + '\n';
             }
             // newN -> number of rows left to 'cover', so that old data doesnt remain visible
-            int newN = _records.Count - offset < 10 ? 10 : 0;
+            int newN = Records.Count - offset < 10 ? 10 : 0;
             for (int i = 0; i < newN; i++)
                 output += new string(' ', 64) + '\n';
             Console.WriteLine(output);
@@ -90,7 +100,7 @@ namespace GameEngine.Utilities
             switch (key)
             {
                 case KeyCommand.Down:
-                    if (_offset + Range < _records.Count)
+                    if (_offset + Range < Records.Count)
                     {
                         _offset += Range;
                         _refresh = true;
