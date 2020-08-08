@@ -12,7 +12,7 @@ namespace View
     public partial class GameView : BasicForm
     {
         private readonly Game _game = new Game();
-        private Board _board = null;
+        private Board _board;
         private int _elapsedFrames = 0;
         private readonly SolidBrush _brush = new SolidBrush(Color.White);
         private readonly Pen _pen = new Pen(new SolidBrush(Color.Red), 2);
@@ -84,8 +84,7 @@ namespace View
         {
             try
             {
-                var sw = new ScoreWriter();
-                sw.SaveScore(name, score);
+                _game.ScoreWriter.SaveScore(name, score);
             }
             catch (IOException e)
             {
@@ -188,7 +187,7 @@ namespace View
             helpStringsLabel.Text = string.Empty;
             foreach (var s in _game.HelpStrings)
             {
-                helpStringsLabel.Text += $"{s}{Environment.NewLine}";
+                helpStringsLabel.Text += $@"{s}{Environment.NewLine}";
             }
         }
     }

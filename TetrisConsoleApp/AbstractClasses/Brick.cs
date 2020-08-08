@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace GameEngine.AbstractClasses
+﻿namespace GameEngine.AbstractClasses
 {
     public abstract class Brick
     {
         protected int posX, posY; //polozenie klocka
-        public string Name { get; }
 
         protected int[,] shape; //definicja kształtu
         public int[,] Shape => shape;
@@ -23,16 +20,17 @@ namespace GameEngine.AbstractClasses
                 {
                     buffer[i] = "";
                     for (int j = 0; j < Width; j++)
+                    {
                         buffer[i] += shape[i, j] == 1 ? '#' : ' ';
+                    }
                 }
                 return buffer;
             }
         }
 
-        protected Brick(int size = 1, string name = "", int posX = 0, int posY = 0)
+        protected Brick(int size = 1, int posX = 0, int posY = 0)
         {
             shape = new int[size, size];
-            this.Name = name;
             this.posX = posX;
             this.posY = posY;
         }
@@ -42,24 +40,27 @@ namespace GameEngine.AbstractClasses
             int size = shape.GetLength(0);
             int[,] result = new int[size, size];
             if (!clockDirection)
-                for (int i = 0; i < size; i++)
-                    for (int j = 0; j < size; j++)
-                        result[size - 1 - j, i] = shape[i, j];
-            else
-                for (int i = 0; i < size; i++)
-                    for (int j = size - 1; j >= 0; j--)
-                        result[i, size - 1 - j] = shape[j, i];
-            return result;
-        }
-
-        public void ShowBrick()
-        {
-            for (int i = 0; i < Height; i++)
             {
-                for (int j = 0; j < Width; j++)
-                    Console.Write(shape[i, j]);
-                Console.Write("\n");
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        result[size - 1 - j, i] = shape[i, j];
+                    }
+                }
             }
+            else
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = size - 1; j >= 0; j--)
+                    {
+                        result[i, size - 1 - j] = shape[j, i];
+                    }
+                }
+            }
+
+            return result;
         }
 
         public void DoRotate(bool right = true)
@@ -94,7 +95,7 @@ namespace GameEngine.AbstractClasses
 
         public Brick DeepCopy()
         {
-            Brick outputBrick = (Brick)this.MemberwiseClone();
+            Brick outputBrick = (Brick)MemberwiseClone();
             outputBrick.shape = (int[,])shape.Clone();
             return outputBrick;
         }

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TetrisConsoleApp.Utilities
+namespace GameEngine.Utilities
 {
     public static class RandomRecordGenerator
     {
-        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private static readonly string[] _names =
+        private static readonly Random Random = new Random(DateTime.Now.Millisecond);
+        private static readonly string[] Names =
         {
             "Sachi", "Derwood", "Zug", "Casey", "Goggin", "Vanni", "Gould", "Centeno", "Janette", "Eliseo", "Nevlin",
             "Cogswell", "Nemhauser", "Belmonte", "Carmelia", "Madai", "Sewell", "Samantha", "Linker", "Burnett",
@@ -35,9 +31,9 @@ namespace TetrisConsoleApp.Utilities
 
         public static Tuple<string, int> GenerateRandomRecord()
         {
-            var name = _names[_random.Next(_names.Length)];
-            var playerNo = _random.Next(100);
-            var score = _random.Next(2000);
+            var name = Names[Random.Next(Names.Length)];
+            var playerNo = Random.Next(100);
+            var score = Random.Next(2000);
             return new Tuple<string, int>($"{name}{playerNo}", score);
         }
     }

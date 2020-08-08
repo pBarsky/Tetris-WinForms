@@ -1,9 +1,9 @@
-﻿using System;
-using GameEngine.Bricks;
+﻿using GameEngine.Bricks;
+using System;
 
 namespace GameEngine.Boards
 {
-    class BoardTester : Board
+    internal class BoardTester : Board
     {
         public BoardTester(int width = 10, int height = 10) : base(width, height)
         {

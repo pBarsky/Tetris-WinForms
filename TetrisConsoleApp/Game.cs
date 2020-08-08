@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using GameEngine.AbstractClasses;
 using GameEngine.Boards;
 using GameEngine.Bricks;
 using GameEngine.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameEngine
 {
@@ -17,7 +14,7 @@ namespace GameEngine
     {
         private Brick _currentBrick;
         private readonly Board _board;
-        private ScoreWriter _scoreWriter;
+        public readonly ScoreWriter ScoreWriter;
         public bool Alive { get; private set; } = true;
         public bool HasChanged { get; private set; }
         private readonly Random _random = new Random(DateTime.Now.Millisecond);
@@ -38,7 +35,7 @@ namespace GameEngine
                 .Where(t => t.IsSubclassOf(typeof(Brick)))
                 .Select(t => (Brick)Activator.CreateInstance(t));
             _allAvailableBricks = bricks.ToList();
-            _scoreWriter = new ScoreWriter();
+            ScoreWriter = new ScoreWriter();
 
         }
 
@@ -70,10 +67,6 @@ namespace GameEngine
             return _board;
         }
 
-        private void GameOver()
-        {
-            //_scoreWriter.SaveScore(Console.ReadLine(), Score);
-        }
 
         public void RestartGame()
         {
@@ -94,7 +87,10 @@ namespace GameEngine
                         HasChanged = true;
                         _currentBrick.MoveDown();
                         if (fastForward)
+                        {
                             Score += 1;
+                        }
+
                         _board.InsertBrick(_currentBrick);
                     }
                     else
@@ -144,13 +140,17 @@ namespace GameEngine
             EnqueueNewBrick();
             _currentBrick.RestartPosition(_random.Next(_board.Width - _currentBrick.Width));
             if (_board.IsColliding(_currentBrick, 0, 0))
+            {
                 Alive = false;
+            }
         }
 
         private void SeedQueue(int size = 3)
         {
             for (int i = 0; i < size; i++)
+            {
                 EnqueueNewBrick();
+            }
         }
 
         private void EnqueueNewBrick()

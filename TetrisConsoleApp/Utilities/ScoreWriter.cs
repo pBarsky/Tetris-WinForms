@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace GameEngine.Utilities
 {
@@ -21,7 +20,9 @@ namespace GameEngine.Utilities
             input = input.Trim();
             input = input.Replace(":", "");
             if (input.Length > 16)
+            {
                 input = input.Substring(0, 16);
+            }
         }
     }
 }

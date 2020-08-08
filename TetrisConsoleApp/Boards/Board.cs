@@ -5,96 +5,114 @@ namespace GameEngine.Boards
     public class Board
     {
         protected int[,] tab;
-        private readonly int _width;
-        private readonly int _height;
-        public int Width => _width;
-        public int Height => _height;
+        public int Width { get; }
+        public int Height { get; }
 
         public int[,] Tab => tab;
 
-        public string[] Buffer
-        {
-            get
-            {
-                string[] buffer = new string[_height + 1];
-                buffer[0] = buffer[_height] = " " + new string('=', _width);
-                for (int i = 1; i < _height; i++)
-                {
-                    buffer[i] += "|";
-                    for (int j = 0; j < _width; j++)
-                    {
-                        buffer[i] += tab[i, j] != 0 ? "#" : " ";
-                    }
-                    buffer[i] += "|";
-                }
-                return buffer;
-            }
-        }
+
         public Board(int width = 10, int height = 20)
         {
-            this._width = width;
-            this._height = height;
+            Width = width;
+            Height = height;
             tab = new int[height, width];
         }
 
         public void InsertBrick(Brick brick)
         {
             for (int i = 0; i < brick.Height; i++)
+            {
                 for (int j = 0; j < brick.Width; j++)
+                {
                     if (brick.Shape[i, j] != 0)
+                    {
                         tab[brick.PosY + i, brick.PosX + j] = brick.Shape[i, j];
+                    }
+                }
+            }
         }
 
         public void DeepClear()
         {
-            for (int i = 0; i < _height; i++)
-                for (int j = 0; j < _width; j++)
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
                     tab[i, j] = 0;
+                }
+            }
         }
 
         public void ShallowClear()
         {
-            for (int i = 0; i < _height; i++)
-                for (int j = 0; j < _width; j++)
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
                     if (tab[i, j] == 1)
+                    {
                         tab[i, j] = 0;
+                    }
+                }
+            }
         }
         public bool IsColliding(Brick brick, int offsetX, int offsetY)
         {
             for (int i = 0; i < brick.Height; i++)
+            {
                 for (int j = 0; j < brick.Width; j++)
                 {
-                    if (brick.Shape[i, j] != 1) continue;
+                    if (brick.Shape[i, j] != 1)
+                    {
+                        continue;
+                    }
+
                     if (i + brick.PosY + offsetY < 0 ||
-                       i + brick.PosY + offsetY >= _height ||
+                       i + brick.PosY + offsetY >= Height ||
                        j + brick.PosX + offsetX < 0 ||
-                       j + brick.PosX + offsetX >= _width ||
+                       j + brick.PosX + offsetX >= Width ||
                        tab[brick.PosY + offsetY + i, brick.PosX + offsetX + j] == 2)
+                    {
                         return true;
+                    }
                 }
+            }
+
             return false;
         }
         public void FreezeBrick(Brick brick)
         {
             for (int i = 0; i < brick.Height; i++)
+            {
                 for (int j = 0; j < brick.Width; j++)
+                {
                     if (brick.Shape[i, j] != 0)
+                    {
                         tab[brick.PosY + i, brick.PosX + j] = 2;
+                    }
+                }
+            }
         }
 
         public int CheckBoard()
         {
             int counter = 0;
-            for (int i = 0; i < _height; i++)
+            for (int i = 0; i < Height; i++)
             {
-                for (int j = 0; j < _width; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     if (tab[i, j] != 2)
+                    {
                         break;
+                    }
+
                     counter++;
                 }
-                if (counter == _width)
+                if (counter == Width)
+                {
                     return i;
+                }
+
                 counter = 0;
             }
             return -1;
@@ -107,8 +125,13 @@ namespace GameEngine.Boards
             while (level != -1)
             {
                 for (int i = level - 1; i >= 0; i--)
-                    for (int j = 0; j < _width; j++)
+                {
+                    for (int j = 0; j < Width; j++)
+                    {
                         tab[i + 1, j] = tab[i, j];
+                    }
+                }
+
                 level = CheckBoard();
                 score *= multiplier;
                 multiplier++;

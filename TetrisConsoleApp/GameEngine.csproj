@@ -77,18 +77,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractClasses\ControllableMenu.cs" />
     <Compile Include="Bricks\BeamBrick.cs" />
     <Compile Include="Boards\Board.cs" />
     <Compile Include="Boards\BoardTester.cs" />
     <Compile Include="AbstractClasses\Brick.cs" />
     <Compile Include="Bricks\BricksQueue.cs" />
-    <Compile Include="Utilities\ConsoleUtilities.cs" />
     <Compile Include="Bricks\ElBrick.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Utilities\KeyboardHandler.cs" />
-    <Compile Include="Utilities\AppManager.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\RandomRecordGenerator.cs" />
     <Compile Include="Utilities\ScoreboardManager.cs" />

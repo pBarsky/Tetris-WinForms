@@ -27,7 +27,7 @@ namespace View
                     Name = "button1",
                     Size = new Size(200, 52),
                     TabIndex = 0,
-                    Text = "Yes",
+                    Text = @"Yes",
                     UseVisualStyleBackColor = true
                 };
                 button1.Click += (sender, e) =>
@@ -57,7 +57,7 @@ namespace View
                     Name = "button2",
                     Size = new Size(200, 52),
                     TabIndex = 2,
-                    Text = "No",
+                    Text = @"No",
                     UseVisualStyleBackColor = true
                 };
                 button2.Click += (s, e) =>
