@@ -3,26 +3,16 @@ using System.IO;
 
 namespace GameEngine.Utilities
 {
-    class ScoreWriter : ScoreboardManager
+    public class ScoreWriter
     {
-        public ScoreWriter() : base(false)
-        {
+        private const string FilePath = @".\scores.txt";
 
-        }
         public void SaveScore(string name, int score)
         {
-            try
+            using (var streamWriter = new StreamWriter(FilePath, true))
             {
-                using (var streamWriter = new StreamWriter(FilePath, true))
-                {
-                    SanitizeInput(ref name);
-                    streamWriter.WriteLine($"{name}: {score}");
-                }
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine("COULD NOT SAVE SCORE TO FILE");
-                Console.WriteLine(e.Message);
+                SanitizeInput(ref name);
+                streamWriter.WriteLine($"{name}: {score}");
             }
         }
         private void SanitizeInput(ref string input)

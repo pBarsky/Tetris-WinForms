@@ -4,6 +4,7 @@ using GameEngine.Boards;
 using GameEngine.Utilities;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace View
@@ -63,15 +64,32 @@ namespace View
                 var result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    scoreLabel.Text = form.ReturnValue;
+                    var userName = form.ReturnValue;
+                    SaveScore(userName, _game.Score);
                 }
             }
 
-            //if (MessageBox.Show("Want to play again?", String.Empty, MessageBoxButtons.YesNo) == DialogResult.Yes)
             if (YesNoDialog.ShowDialog("Want to play again?") == DialogResult.Yes)
             {
                 _game.RestartGame();
                 gameTimer.Enabled = true;
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void SaveScore(string name, int score)
+        {
+            try
+            {
+                var sw = new ScoreWriter();
+                sw.SaveScore(name, score);
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
