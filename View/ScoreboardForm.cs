@@ -17,5 +17,10 @@ namespace View
             dataGridView1.Columns[0].HeaderText = @"Player name";
             dataGridView1.Columns[1].HeaderText = @"Score";
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
