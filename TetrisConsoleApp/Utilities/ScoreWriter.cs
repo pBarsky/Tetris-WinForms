@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace GameEngine.Utilities
 {
@@ -10,19 +12,26 @@ namespace GameEngine.Utilities
         {
             using (var streamWriter = new StreamWriter(FilePath, true))
             {
-                SanitizeInput(ref name);
-                streamWriter.WriteLine($"{name}: {score}");
+                streamWriter.WriteLine($"{SanitizeInput(name)}: {score}");
             }
         }
-        private void SanitizeInput(ref string input)
+
+        public static void SaveScore(IEnumerable<Tuple<string, int>> records)
+        {
+            using (var streamWriter = new StreamWriter(FilePath, true))
+            {
+                foreach (var (name, score) in records)
+                {
+                    streamWriter.WriteLine($"{SanitizeInput(name)}: {score}");
+                }
+            }
+        }
+        private static string SanitizeInput(string input)
         {
             // Removing only ':' (as for now), because i split my records using it.
             input = input.Trim();
             input = input.Replace(":", "");
-            if (input.Length > 16)
-            {
-                input = input.Substring(0, 16);
-            }
+            return input.Length > 16 ? input.Substring(0, 16) : input;
         }
     }
 }

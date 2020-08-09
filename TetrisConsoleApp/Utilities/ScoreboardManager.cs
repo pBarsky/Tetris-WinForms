@@ -22,10 +22,10 @@ namespace GameEngine.Utilities
             var scores = new List<Tuple<string, int>>();
             try
             {
-                string[] lines = File.ReadAllLines(FilePath);
-                foreach (string line in lines)
+                var lines = File.ReadAllLines(FilePath);
+                foreach (var line in lines)
                 {
-                    string[] keyVal = line.Split(':');
+                    var keyVal = line.Split(':');
                     scores.Add(new Tuple<string, int>(keyVal[0], int.TryParse(keyVal[1], out int score) ? score : 0));
                 }
             }
@@ -49,13 +49,13 @@ namespace GameEngine.Utilities
 
         }
 
-        private void Seed(ICollection<Tuple<string, int>> scores, int noOfRows)
+        private static void Seed(ICollection<Tuple<string, int>> scores, int noOfRows)
         {
-            for (int i = 0; i < noOfRows; i++)
+            for (var i = 0; i < noOfRows; i++)
             {
                 scores.Add(RandomRecordGenerator.GenerateRandomRecord());
             }
-
+            ScoreWriter.SaveScore(scores);
         }
 
         private void RefreshData()
