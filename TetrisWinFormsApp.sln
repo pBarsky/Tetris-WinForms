@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "TetrisConsoleApp\GameEngine.csproj", "{674369EE-CA16-4FA9-B429-4858459600A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{BD82FFBD-90D6-4B6B-9646-5C93A0D308E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TetrisGame", "View\TetrisGame.csproj", "{BD82FFBD-90D6-4B6B-9646-5C93A0D308E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

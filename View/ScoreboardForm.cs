@@ -1,7 +1,8 @@
-﻿using GameEngine.Utilities;
-using System;
+﻿using System;
+using GameEngine.Utilities;
+using View;
 
-namespace View
+namespace TetrisGame
 {
     public partial class ScoreboardForm : BasicForm
     {

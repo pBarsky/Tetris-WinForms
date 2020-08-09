@@ -1,7 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using View;
 
-namespace View
+namespace TetrisGame
 {
     public partial class YesNoDialog : BasicForm
     {

@@ -1,4 +1,4 @@
-﻿namespace View
+﻿namespace TetrisGame
 {
     partial class GameView
     {

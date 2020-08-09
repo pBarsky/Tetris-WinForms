@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using View;
 
-namespace View
+namespace TetrisGame
 {
     public partial class MainMenuForm : BasicForm
     {

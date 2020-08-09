@@ -1,13 +1,14 @@
-﻿using GameEngine;
-using GameEngine.AbstractClasses;
-using GameEngine.Boards;
-using GameEngine.Utilities;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using GameEngine;
+using GameEngine.AbstractClasses;
+using GameEngine.Boards;
+using GameEngine.Utilities;
+using View;
 
-namespace View
+namespace TetrisGame
 {
     public partial class GameView : BasicForm
     {
