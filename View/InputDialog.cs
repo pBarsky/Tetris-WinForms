@@ -9,7 +9,7 @@ namespace View
         public InputDialog(int score)
         {
             InitializeComponent();
-            congratulationsLabel.Text = $@"You've scored {score} points!";
+            scoreTextbox.Text = $@"{score}";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -17,6 +17,14 @@ namespace View
             ReturnValue = textBox1.Text;
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void InputDialog_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                button1_Click(sender, e);
+            }
         }
     }
 }
