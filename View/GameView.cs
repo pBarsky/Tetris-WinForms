@@ -21,6 +21,8 @@ namespace View
         private const int BoxWidth = 10;
         private const int BoxHeight = 10;
         private readonly int _scaleFactor = 2;
+        private bool _firstClosingGate = false;
+        private bool _secondClosingGate = false;
         private KeyCommand _currentKey = KeyCommand.None;
         private readonly Font _myFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
         public GameView()
@@ -57,8 +59,12 @@ namespace View
             UpdateScore();
         }
 
-        private void GameOver(bool closing = false)
+        private void GameOver()
         {
+            if (_firstClosingGate)
+            {
+                return;
+            }
             using (var form = new InputDialog(_game.Score))
             {
                 var result = form.ShowDialog();
@@ -69,13 +75,14 @@ namespace View
                 }
             }
 
-            if (YesNoDialog.ShowDialog("Want to play again?") == DialogResult.Yes)
+            if (!_secondClosingGate && YesNoDialog.ShowDialog("Want to play again?") == DialogResult.Yes)
             {
                 _game.RestartGame();
                 gameTimer.Enabled = true;
             }
-            else if (!closing)
+            else
             {
+                _firstClosingGate = true;
                 Close();
             }
         }
@@ -193,7 +200,8 @@ namespace View
 
         private void GameView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GameOver(true);
+            _secondClosingGate = true;
+            GameOver();
         }
     }
 }
