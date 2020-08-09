@@ -107,6 +107,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "GameView";
             this.Text = "GameView";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameView_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameView_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameView_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

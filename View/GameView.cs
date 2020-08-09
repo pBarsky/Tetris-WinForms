@@ -57,7 +57,7 @@ namespace View
             UpdateScore();
         }
 
-        private void GameOver()
+        private void GameOver(bool closing = false)
         {
             using (var form = new InputDialog(_game.Score))
             {
@@ -74,7 +74,7 @@ namespace View
                 _game.RestartGame();
                 gameTimer.Enabled = true;
             }
-            else
+            else if (!closing)
             {
                 Close();
             }
@@ -189,6 +189,11 @@ namespace View
             {
                 helpStringsLabel.Text += $@"{s}{Environment.NewLine}";
             }
+        }
+
+        private void GameView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            GameOver(true);
         }
     }
 }
