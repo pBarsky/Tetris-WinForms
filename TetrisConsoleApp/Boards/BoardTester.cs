@@ -27,6 +27,7 @@ namespace GameEngine.Boards
             BeamBrick beamBrick = new BeamBrick();
             return !IsColliding(beamBrick, 0, 0);
         }
+
         public bool BrickCollisionTestcase2()
         {
             /*

@@ -17,6 +17,7 @@ namespace GameEngine.Utilities
                 RefreshData();
             }
         }
+
         private List<Tuple<string, int>> ReadScores(bool sorted = true)
         {
             var scores = new List<Tuple<string, int>>();
@@ -46,7 +47,6 @@ namespace GameEngine.Utilities
 
             var scoreSorting = scores.OrderByDescending(row => row.Item2);
             return scoreSorting.ToList();
-
         }
 
         private static void Seed(ICollection<Tuple<string, int>> scores, int noOfRows)

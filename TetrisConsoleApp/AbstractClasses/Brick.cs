@@ -77,10 +77,12 @@
         {
             Move(-1, 0);
         }
+
         public void MoveRight()
         {
             Move(1, 0);
         }
+
         private void Move(int offsetX, int offsetY)
         {
             posX += offsetX;

@@ -36,7 +36,6 @@ namespace GameEngine
                 .Select(t => (Brick)Activator.CreateInstance(t));
             _allAvailableBricks = bricks.ToList();
             ScoreWriter = new ScoreWriter();
-
         }
 
         private void ClearBricksQueueBuffer()
@@ -54,6 +53,7 @@ namespace GameEngine
             SeedQueue();
             NextBrick();
         }
+
         public Board Step(bool down, KeyCommand key)
         {
             _board.ShallowClear();
@@ -66,7 +66,6 @@ namespace GameEngine
             }
             return _board;
         }
-
 
         public void RestartGame()
         {
@@ -100,6 +99,7 @@ namespace GameEngine
                         NextBrick();
                     }
                     break;
+
                 case KeyCommand.Left:
                     if (!_board.IsColliding(_currentBrick, -1, 0))
                     {
@@ -108,6 +108,7 @@ namespace GameEngine
                         _board.InsertBrick(_currentBrick);
                     }
                     break;
+
                 case KeyCommand.Right:
                     if (!_board.IsColliding(_currentBrick, 1, 0))
                     {
@@ -116,6 +117,7 @@ namespace GameEngine
                         _board.InsertBrick(_currentBrick);
                     }
                     break;
+
                 case KeyCommand.Up:
                     _currentBrick.DoRotate(false);
                     if (!_board.IsColliding(_currentBrick, 0, 0))
@@ -128,6 +130,7 @@ namespace GameEngine
                         _currentBrick.DoRotate();
                     }
                     break;
+
                 case KeyCommand.Escape:
                     Alive = false;
                     break;

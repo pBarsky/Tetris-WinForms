@@ -10,7 +10,6 @@ namespace GameEngine.Boards
 
         public int[,] Tab => tab;
 
-
         public Board(int width = 10, int height = 20)
         {
             Width = width;
@@ -56,6 +55,7 @@ namespace GameEngine.Boards
                 }
             }
         }
+
         public bool IsColliding(Brick brick, int offsetX, int offsetY)
         {
             for (int i = 0; i < brick.Height; i++)
@@ -80,6 +80,7 @@ namespace GameEngine.Boards
 
             return false;
         }
+
         public void FreezeBrick(Brick brick)
         {
             for (int i = 0; i < brick.Height; i++)

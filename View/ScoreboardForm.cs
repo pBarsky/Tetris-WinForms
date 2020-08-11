@@ -1,5 +1,5 @@
-﻿using System;
-using GameEngine.Utilities;
+﻿using GameEngine.Utilities;
+using System;
 using View;
 
 namespace TetrisGame
@@ -7,6 +7,7 @@ namespace TetrisGame
     public partial class ScoreboardForm : BasicForm
     {
         private readonly ScoreboardManager _scoreboardManager = new ScoreboardManager();
+
         public ScoreboardForm()
         {
             InitializeComponent();

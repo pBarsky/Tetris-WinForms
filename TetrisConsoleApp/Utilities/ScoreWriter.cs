@@ -26,6 +26,7 @@ namespace GameEngine.Utilities
                 }
             }
         }
+
         private static string SanitizeInput(string input)
         {
             // Removing only ':' (as for now), because i split my records using it.

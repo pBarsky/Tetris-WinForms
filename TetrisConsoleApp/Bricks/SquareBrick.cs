@@ -14,6 +14,7 @@ namespace GameEngine.Bricks
                 }
             }
         }
+
         public SquareBrick() : this(2, 0, 0)
         {
         }

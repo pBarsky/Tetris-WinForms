@@ -1,11 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-using GameEngine;
+﻿using GameEngine;
 using GameEngine.AbstractClasses;
 using GameEngine.Boards;
 using GameEngine.Utilities;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 using View;
 
 namespace TetrisGame
@@ -26,6 +26,7 @@ namespace TetrisGame
         private bool _secondClosingGate = false;
         private KeyCommand _currentKey = KeyCommand.None;
         private readonly Font _myFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
+
         public GameView()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace TetrisGame
             timer1_Tick(null, null);
             PrepareHelpStrings();
         }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!_game.Alive)
@@ -99,6 +101,7 @@ namespace TetrisGame
                 MessageBox.Show(e.Message);
             }
         }
+
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             for (int i = 0; i < _board.Width; i++)
@@ -114,22 +117,27 @@ namespace TetrisGame
                 }
             }
         }
+
         private void DrawBrick(PaintEventArgs e, int x, int y)
         {
             e.Graphics.FillRectangle(_brush, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
         }
+
         private void DrawBox(PaintEventArgs e, int x, int y)
         {
             e.Graphics.DrawRectangle(_pen, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
         }
+
         private void DrawString(string text, PaintEventArgs e, int x, int y)
         {
             e.Graphics.DrawString(text, _myFont, _brush, x, y);
         }
+
         private void DrawString(string text, PaintEventArgs e, int x, int y, StringFormat format)
         {
             e.Graphics.DrawString(text, _myFont, _brush, x, y, format);
         }
+
         private void GameView_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -137,27 +145,34 @@ namespace TetrisGame
                 case Keys.Left:
                     _currentKey = KeyCommand.Left;
                     break;
+
                 case Keys.Right:
                     _currentKey = KeyCommand.Right;
                     break;
+
                 case Keys.Up:
                     _currentKey = KeyCommand.Up;
                     break;
+
                 case Keys.Down:
                     _currentKey = KeyCommand.Down;
                     break;
+
                 case Keys.Enter:
                     _currentKey = KeyCommand.Enter;
                     break;
+
                 case Keys.Escape:
                     _currentKey = KeyCommand.Escape;
                     break;
             }
         }
+
         private void GameView_KeyUp(object sender, KeyEventArgs e)
         {
             _currentKey = KeyCommand.None;
         }
+
         private void pictureBox2_Paint(object sender, PaintEventArgs e)
         {
             int brickCount = 0;
@@ -186,10 +201,12 @@ namespace TetrisGame
                 offset += brick.Height;
             }
         }
+
         private void UpdateScore()
         {
             scoreLabel.Text = $@"{_game.Score}";
         }
+
         private void PrepareHelpStrings()
         {
             helpStringsLabel.Text = string.Empty;

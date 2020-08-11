@@ -6,6 +6,7 @@ namespace View
     public partial class InputDialog : BasicForm
     {
         public string ReturnValue { get; private set; }
+
         public InputDialog(int score)
         {
             InitializeComponent();
