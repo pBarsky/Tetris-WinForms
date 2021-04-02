@@ -1,14 +1,13 @@
-﻿using GameEngine.Utilities;
-using System;
-using View;
+﻿using System;
+using GameEngine.Utilities;
 
-namespace TetrisGame
+namespace TetrisGame.Views
 {
-    public partial class ScoreboardForm : BasicForm
+    public partial class ScoreboardView : BasicForm
     {
         private readonly ScoreboardManager _scoreboardManager = new ScoreboardManager();
 
-        public ScoreboardForm()
+        public ScoreboardView()
         {
             InitializeComponent();
         }

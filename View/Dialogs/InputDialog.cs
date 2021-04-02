@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using TetrisGame.Views;
 
-namespace View
+namespace TetrisGame.Dialogs
 {
     public partial class InputDialog : BasicForm
     {

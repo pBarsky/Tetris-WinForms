@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using View;
+using TetrisGame.Dialogs;
 
-namespace TetrisGame
+namespace TetrisGame.Views
 {
-    public partial class MainMenuForm : BasicForm
+    public partial class MainMenuView : BasicForm
     {
-        public MainMenuForm()
+        public MainMenuView()
         {
             InitializeComponent();
         }
@@ -27,7 +27,7 @@ namespace TetrisGame
 
         private void scoreboardButton_Click(object sender, EventArgs e)
         {
-            ReplaceCurrentForm(new ScoreboardForm());
+            ReplaceCurrentForm(new ScoreboardView());
         }
 
         private void ReplaceCurrentForm(Form form)

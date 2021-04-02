@@ -1,6 +1,6 @@
-﻿namespace TetrisGame
+﻿namespace TetrisGame.Views
 {
-    partial class ScoreboardForm
+    partial class ScoreboardView
     {
         /// <summary>
         /// Required designer variable.
@@ -85,7 +85,7 @@
             this.label1.Size = new System.Drawing.Size(748, 2);
             this.label1.TabIndex = 2;
             // 
-            // ScoreboardForm
+            // ScoreboardView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -93,8 +93,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "ScoreboardForm";
-            this.Text = "ScoreboardForm";
+            this.Name = "ScoreboardView";
+            this.Text = "ScoreboardView";
             this.Load += new System.EventHandler(this.Scoreboard_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

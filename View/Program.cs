@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using TetrisGame.Views;
 
 namespace TetrisGame
 {
@@ -13,7 +14,7 @@ namespace TetrisGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenuForm());
+            Application.Run(new MainMenuView());
         }
     }
 }

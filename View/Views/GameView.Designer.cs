@@ -1,6 +1,6 @@
-﻿namespace TetrisGame
+﻿namespace TetrisGame.Views
 {
-    partial class GameView
+    sealed partial class GameView
     {
         /// <summary>
         /// Required designer variable.

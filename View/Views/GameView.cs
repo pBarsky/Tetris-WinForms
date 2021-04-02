@@ -1,31 +1,23 @@
 ﻿using GameEngine;
-using GameEngine.AbstractClasses;
 using GameEngine.Boards;
 using GameEngine.Utilities;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using View;
+using TetrisGame.Dialogs;
+using TetrisGame.Utilities;
 
-namespace TetrisGame
+namespace TetrisGame.Views
 {
-    public partial class GameView : BasicForm
+    public sealed partial class GameView : BasicForm
     {
         private readonly Game _game = new Game();
         private Board _board;
-        private int _elapsedFrames = 0;
-        private readonly SolidBrush _brush = new SolidBrush(Color.White);
-        private readonly Pen _pen = new Pen(new SolidBrush(Color.Red), 2);
-        private const int BoxMarginVertical = 10;
-        private const int BoxMarginHorizontal = 10;
-        private const int BoxWidth = 10;
-        private const int BoxHeight = 10;
-        private readonly int _scaleFactor = 2;
-        private bool _firstClosingGate = false;
-        private bool _secondClosingGate = false;
+        private int _elapsedFrames;
+        private bool _firstClosingGate;
+        private bool _secondClosingGate;
         private KeyCommand _currentKey = KeyCommand.None;
-        private readonly Font _myFont = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Bold);
+        private readonly Drawer _drawer = new Drawer();
 
         public GameView()
         {
@@ -39,12 +31,15 @@ namespace TetrisGame
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!_game.Alive)
-            {
-                gameTimer.Enabled = false;
-                GameOver();
-            }
+            HandleGameOver();
+            var ff = IsAutoDropBrick();
+            NextFrame(ff);
+            RefreshView();
+            UpdateScore();
+        }
 
+        private bool IsAutoDropBrick()
+        {
             _elapsedFrames++;
             var ff = _elapsedFrames > 10;
             if (ff)
@@ -52,14 +47,26 @@ namespace TetrisGame
                 _elapsedFrames = 0;
             }
 
-            _board = _game.Step(ff, _currentKey);
-            if (_game.HasChanged)
-            {
-                pictureBox1.Refresh();
-                pictureBox2.Refresh();
-            }
+            return ff;
+        }
 
-            UpdateScore();
+        private void HandleGameOver()
+        {
+            if (_game.Alive) return;
+            gameTimer.Enabled = false;
+            GameOver();
+        }
+
+        private void NextFrame(bool ff)
+        {
+            _board = _game.Step(ff, _currentKey);
+        }
+
+        private void RefreshView()
+        {
+            if (!_game.HasChanged) return;
+            pictureBox1.Refresh();
+            pictureBox2.Refresh();
         }
 
         private void GameOver()
@@ -68,16 +75,14 @@ namespace TetrisGame
             {
                 return;
             }
-            using (var form = new InputDialog(_game.Score))
-            {
-                var result = form.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    var userName = form.ReturnValue;
-                    SaveScore(userName, _game.Score);
-                }
-            }
 
+            ShowNameInputDialog();
+
+            HandleRestartOrClose();
+        }
+
+        private void HandleRestartOrClose()
+        {
             if (!_secondClosingGate && YesNoDialog.ShowDialog("Want to play again?") == DialogResult.Yes)
             {
                 _game.RestartGame();
@@ -87,6 +92,19 @@ namespace TetrisGame
             {
                 _firstClosingGate = true;
                 Close();
+            }
+        }
+
+        private void ShowNameInputDialog()
+        {
+            using (var form = new InputDialog(_game.Score))
+            {
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var userName = form.ReturnValue;
+                    SaveScore(userName, _game.Score);
+                }
             }
         }
 
@@ -104,38 +122,18 @@ namespace TetrisGame
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            for (int i = 0; i < _board.Width; i++)
+            for (var i = 0; i < _board.Width; i++)
             {
-                for (int j = 0; j < _board.Height; j++)
+                for (var j = 0; j < _board.Height; j++)
                 {
                     if (_board.Tab[j, i] != 0)
                     {
-                        DrawBrick(e, i, j);
+                        _drawer.DrawRectangle(e, i, j);
                     }
 
-                    DrawBox(e, i, j);
+                    _drawer.DrawBox(e, i, j);
                 }
             }
-        }
-
-        private void DrawBrick(PaintEventArgs e, int x, int y)
-        {
-            e.Graphics.FillRectangle(_brush, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
-        }
-
-        private void DrawBox(PaintEventArgs e, int x, int y)
-        {
-            e.Graphics.DrawRectangle(_pen, (x + 1) * BoxMarginHorizontal * _scaleFactor, (y + 1) * BoxMarginVertical * _scaleFactor, BoxWidth * _scaleFactor, BoxHeight * _scaleFactor);
-        }
-
-        private void DrawString(string text, PaintEventArgs e, int x, int y)
-        {
-            e.Graphics.DrawString(text, _myFont, _brush, x, y);
-        }
-
-        private void DrawString(string text, PaintEventArgs e, int x, int y, StringFormat format)
-        {
-            e.Graphics.DrawString(text, _myFont, _brush, x, y, format);
         }
 
         private void GameView_KeyDown(object sender, KeyEventArgs e)
@@ -175,29 +173,15 @@ namespace TetrisGame
 
         private void pictureBox2_Paint(object sender, PaintEventArgs e)
         {
-            int brickCount = 0;
-            int y = 0;
-            int offset = 0;
-            int brickDisplayCount = 0;
-            foreach (Brick brick in _game.QueueBricks)
+            var brickCount = 1;
+            var y = 0;
+            var offset = 0;
+            foreach (var brick in _game.QueueBricks)
             {
-                DrawString($"Brick {++brickCount}:", e, 20, y + 20);
-                y += 20;
-                for (int i = 0; i < brick.Width; i++)
-                {
-                    for (int j = 0; j < brick.Height; j++)
-                    {
-                        if (brick.Shape[j, i] != 0)
-                        {
-                            DrawBrick(e, i, j + offset + brickCount + brickDisplayCount);
-                        }
+                _drawer.DrawBrick(e, brickCount, y, brick, offset);
 
-                        DrawBox(e, i, j + offset + brickCount + brickDisplayCount);
-                    }
-                }
-
-                brickDisplayCount++;
-                y += 20 * (1 + brick.Height);
+                brickCount++;
+                y += 20 * (2 + brick.Height);
                 offset += brick.Height;
             }
         }

@@ -1,4 +1,4 @@
-﻿namespace TetrisGame
+﻿namespace TetrisGame.Dialogs
 {
     partial class YesNoDialog
     {

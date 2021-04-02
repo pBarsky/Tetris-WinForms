@@ -1,4 +1,4 @@
-﻿namespace View
+﻿namespace TetrisGame.Dialogs
 {
     partial class InputDialog
     {

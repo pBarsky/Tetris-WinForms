@@ -1,6 +1,6 @@
-﻿namespace TetrisGame
+﻿namespace TetrisGame.Views
 {
-    partial class MainMenuForm
+    partial class MainMenuView
     {
         /// <summary>
         /// Required designer variable.

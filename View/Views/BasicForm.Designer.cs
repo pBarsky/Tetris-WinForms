@@ -1,4 +1,4 @@
-﻿namespace View
+﻿namespace TetrisGame.Views
 {
     partial class BasicForm
     {

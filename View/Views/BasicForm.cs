@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace View
+namespace TetrisGame.Views
 {
     public partial class BasicForm : Form
     {
