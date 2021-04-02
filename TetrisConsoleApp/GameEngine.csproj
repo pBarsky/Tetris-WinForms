@@ -84,6 +84,7 @@
     <Compile Include="Bricks\BricksQueue.cs" />
     <Compile Include="Bricks\ElBrick.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Utilities\InputHandler.cs" />
     <Compile Include="Utilities\KeyboardHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\RandomRecordGenerator.cs" />

@@ -8,12 +8,12 @@ namespace GameEngine.Bricks
         {
             for (int i = 0; i < size; i++)
             {
-                shape[0, i] = 1;
+                Shape[0, i] = 1;
             }
 
             for (int i = 0; i < size - 1; i++)
             {
-                shape[i, size / 2] = 1;
+                Shape[i, size / 2] = 1;
             }
         }
 

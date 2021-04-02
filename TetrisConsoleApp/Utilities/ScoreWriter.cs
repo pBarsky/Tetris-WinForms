@@ -16,7 +16,7 @@ namespace GameEngine.Utilities
             }
         }
 
-        public static void SaveScore(IEnumerable<Tuple<string, int>> records)
+        public static void SaveScore(ICollection<Record> records)
         {
             using (var streamWriter = new StreamWriter(FilePath, true))
             {

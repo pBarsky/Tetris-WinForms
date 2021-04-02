@@ -8,7 +8,7 @@ namespace GameEngine.Bricks
         {
             for (int i = 0; i < size; i++)
             {
-                shape[size / 2, i] = 1;
+                Shape[size / 2, i] = 1;
             }
         }
 

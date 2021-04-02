@@ -5,9 +5,21 @@ using System.Linq;
 
 namespace GameEngine.Utilities
 {
+    public struct Record
+    {
+        public string Name;
+        public int Score;
+
+        public void Deconstruct(out string name, out int score)
+        {
+            name = Name;
+            score = Score;
+        }
+    }
+
     public class ScoreboardManager
     {
-        public List<Tuple<string, int>> Records { get; private set; }
+        public List<Record> Records { get; private set; }
         private const string FilePath = @".\scores.txt";
 
         public ScoreboardManager(bool readData = true)
@@ -18,17 +30,12 @@ namespace GameEngine.Utilities
             }
         }
 
-        private List<Tuple<string, int>> ReadScores(bool sorted = true)
+        private static List<Record> ReadScores(bool sorted = true)
         {
-            var scores = new List<Tuple<string, int>>();
+            var scores = new List<Record>();
             try
             {
-                var lines = File.ReadAllLines(FilePath);
-                foreach (var line in lines)
-                {
-                    var keyVal = line.Split(':');
-                    scores.Add(new Tuple<string, int>(keyVal[0], int.TryParse(keyVal[1], out int score) ? score : 0));
-                }
+                ReadScoresFromFile(scores);
             }
             catch (IOException e)
             {
@@ -40,16 +47,33 @@ namespace GameEngine.Utilities
             {
                 Seed(scores, 1000 - scores.Count);
             }
-            if (!sorted)
-            {
-                return scores;
-            }
 
-            var scoreSorting = scores.OrderByDescending(row => row.Item2);
-            return scoreSorting.ToList();
+            return !sorted ? scores : scores.OrderByDescending(row => row.Score).ToList();
         }
 
-        private static void Seed(ICollection<Tuple<string, int>> scores, int noOfRows)
+        private static void ReadScoresFromFile(ICollection<Record> scores)
+        {
+            var lines = File.ReadAllLines(FilePath);
+            foreach (var line in lines)
+            {
+                var parsedRecord = ParseLine(line);
+                scores.Add(parsedRecord);
+            }
+        }
+
+        private static Record ParseLine(string line)
+        {
+            var keyVal = line.Split(':');
+            var parsedScore = ParseRawScore(keyVal[1]);
+            return new Record { Name = keyVal[0], Score = parsedScore };
+        }
+
+        private static int ParseRawScore(string value)
+        {
+            return int.TryParse(value, out var rawScore) ? rawScore : 0;
+        }
+
+        private static void Seed(ICollection<Record> scores, int noOfRows)
         {
             for (var i = 0; i < noOfRows; i++)
             {

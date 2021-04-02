@@ -30,12 +30,12 @@ namespace GameEngine.Utilities
             "Katzir", "Cyndia", "Greff", "Orion", "Almeria"
         };
 
-        public static Tuple<string, int> GenerateRandomRecord()
+        public static Record GenerateRandomRecord()
         {
             var name = Names[Random.Next(Names.Length)];
             var playerNo = Random.Next(100);
             var score = Random.Next(2000);
-            return new Tuple<string, int>($"{name}{playerNo}", score);
+            return new Record { Name = $"{name}{playerNo}", Score = score };
         }
     }
 }

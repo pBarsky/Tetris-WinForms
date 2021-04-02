@@ -12,15 +12,16 @@ namespace GameEngine
 
     public class Game
     {
-        private Brick _currentBrick;
-        private readonly Board _board;
         public readonly ScoreWriter ScoreWriter;
         public bool Alive { get; private set; } = true;
-        public bool HasChanged { get; private set; }
+        public bool HasChanged { get; set; }
         private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        public int Score { get; private set; }
+        public int Score { get; set; }
         private static List<Brick> _allAvailableBricks;
+        private readonly InputHandler _inputHandler;
         public BricksQueue QueueBricks { get; } = new BricksQueue();
+        public Brick CurrentBrick { set; get; }
+        public Board Board { get; }
 
         public string[] HelpStrings { get; } =
         {
@@ -30,22 +31,13 @@ namespace GameEngine
 
         public Game(int boardHeight = 20, int boardWidth = 10)
         {
-            _board = new Board(boardWidth, boardHeight);
+            Board = new Board(boardWidth, boardHeight);
             IEnumerable<Brick> bricks = typeof(Brick).Assembly.GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(Brick)))
                 .Select(t => (Brick)Activator.CreateInstance(t));
             _allAvailableBricks = bricks.ToList();
             ScoreWriter = new ScoreWriter();
-        }
-
-        private void ClearBricksQueueBuffer()
-        {
-            string clearLine = new string(' ', 20);
-            for (int i = 1; i < _board.Height; i++)
-            {
-                Console.SetCursorPosition(_board.Width + 2, 1 + i);
-                Console.Write(clearLine);
-            }
+            _inputHandler = new InputHandler(this);
         }
 
         public void Prepare()
@@ -56,22 +48,20 @@ namespace GameEngine
 
         public Board Step(bool down, KeyCommand key)
         {
-            _board.ShallowClear();
+            Board.ShallowClear();
             HasChanged = false;
             HandlePlayerMovement(key, true);
-            if (down)
-            {
-                _board.ShallowClear();
-                HandlePlayerMovement(KeyCommand.Down);
-            }
-            return _board;
+            if (!down) return Board;
+            Board.ShallowClear();
+            HandlePlayerMovement(KeyCommand.Down);
+            return Board;
         }
 
         public void RestartGame()
         {
             Score = 0;
             Alive = true;
-            _board.DeepClear();
+            Board.DeepClear();
             QueueBricks.Clear();
             Prepare();
         }
@@ -81,54 +71,19 @@ namespace GameEngine
             switch (direction)
             {
                 case KeyCommand.Down:
-                    if (!_board.IsColliding(_currentBrick, 0, 1))
-                    {
-                        HasChanged = true;
-                        _currentBrick.MoveDown();
-                        if (fastForward)
-                        {
-                            Score += 1;
-                        }
-
-                        _board.InsertBrick(_currentBrick);
-                    }
-                    else
-                    {
-                        _board.FreezeBrick(_currentBrick);
-                        Score += _board.Gravitate(_board.Width);
-                        NextBrick();
-                    }
+                    _inputHandler.HandleDownPress(fastForward);
                     break;
 
                 case KeyCommand.Left:
-                    if (!_board.IsColliding(_currentBrick, -1, 0))
-                    {
-                        HasChanged = true;
-                        _currentBrick.MoveLeft();
-                        _board.InsertBrick(_currentBrick);
-                    }
+                    _inputHandler.HandleLeftPress();
                     break;
 
                 case KeyCommand.Right:
-                    if (!_board.IsColliding(_currentBrick, 1, 0))
-                    {
-                        HasChanged = true;
-                        _currentBrick.MoveRight();
-                        _board.InsertBrick(_currentBrick);
-                    }
+                    _inputHandler.HandleRightPress();
                     break;
 
                 case KeyCommand.Up:
-                    _currentBrick.DoRotate(false);
-                    if (!_board.IsColliding(_currentBrick, 0, 0))
-                    {
-                        HasChanged = true;
-                        _board.InsertBrick(_currentBrick);
-                    }
-                    else
-                    {
-                        _currentBrick.DoRotate();
-                    }
+                    _inputHandler.HandleUpPress();
                     break;
 
                 case KeyCommand.Escape:
@@ -137,12 +92,12 @@ namespace GameEngine
             }
         }
 
-        private void NextBrick()
+        public void NextBrick()
         {
-            _currentBrick = QueueBricks.Dequeue();
+            CurrentBrick = QueueBricks.Dequeue();
             EnqueueNewBrick();
-            _currentBrick.RestartPosition(_random.Next(_board.Width - _currentBrick.Width));
-            if (_board.IsColliding(_currentBrick, 0, 0))
+            CurrentBrick.RestartPosition(_random.Next(Board.Width - CurrentBrick.Width));
+            if (Board.IsColliding(CurrentBrick, 0, 0))
             {
                 Alive = false;
             }

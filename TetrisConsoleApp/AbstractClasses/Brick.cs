@@ -2,26 +2,26 @@
 {
     public abstract class Brick
     {
-        protected int posX, posY; //polozenie klocka
+        public int[,] Shape { get; protected set; }
 
-        protected int[,] shape; //definicja kształtu
-        public int[,] Shape => shape;
-        public int PosX => posX;
-        public int PosY => posY;
-        public int Height => shape.GetLength(0);
-        public int Width => shape.GetLength(1);
+        public int PosX { get; protected set; }
+
+        public int PosY { get; protected set; }
+
+        public int Height => Shape.GetLength(0);
+        public int Width => Shape.GetLength(1);
 
         public string[] Buffer
         {
             get
             {
-                string[] buffer = new string[Height];
+                var buffer = new string[Height];
                 for (int i = 0; i < Height; i++)
                 {
                     buffer[i] = "";
                     for (int j = 0; j < Width; j++)
                     {
-                        buffer[i] += shape[i, j] == 1 ? '#' : ' ';
+                        buffer[i] += Shape[i, j] == 1 ? '#' : ' ';
                     }
                 }
                 return buffer;
@@ -30,33 +30,38 @@
 
         protected Brick(int size = 1, int posX = 0, int posY = 0)
         {
-            shape = new int[size, size];
-            this.posX = posX;
-            this.posY = posY;
+            Shape = new int[size, size];
+            this.PosX = posX;
+            this.PosY = posY;
         }
 
         private int[,] Rotate(bool clockDirection)
         {
-            int size = shape.GetLength(0);
-            int[,] result = new int[size, size];
-            if (!clockDirection)
+            var size = Shape.GetLength(0);
+            var result = new int[size, size];
+            return clockDirection ? RotateRight(size, result) : RotateLeft(size, result);
+        }
+
+        private int[,] RotateRight(int size, int[,] result)
+        {
+            for (int i = 0; i < size; i++)
             {
-                for (int i = 0; i < size; i++)
+                for (int j = size - 1; j >= 0; j--)
                 {
-                    for (int j = 0; j < size; j++)
-                    {
-                        result[size - 1 - j, i] = shape[i, j];
-                    }
+                    result[i, size - 1 - j] = Shape[j, i];
                 }
             }
-            else
+
+            return result;
+        }
+
+        private int[,] RotateLeft(int size, int[,] result)
+        {
+            for (int i = 0; i < size; i++)
             {
-                for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
                 {
-                    for (int j = size - 1; j >= 0; j--)
-                    {
-                        result[i, size - 1 - j] = shape[j, i];
-                    }
+                    result[size - 1 - j, i] = Shape[i, j];
                 }
             }
 
@@ -65,7 +70,7 @@
 
         public void DoRotate(bool right = true)
         {
-            shape = Rotate(right);
+            Shape = Rotate(right);
         }
 
         public void MoveDown()
@@ -85,20 +90,20 @@
 
         private void Move(int offsetX, int offsetY)
         {
-            posX += offsetX;
-            posY += offsetY;
+            PosX += offsetX;
+            PosY += offsetY;
         }
 
         public void RestartPosition(int newPosX)
         {
-            posY = 0;
-            posX = newPosX;
+            PosY = 0;
+            PosX = newPosX;
         }
 
         public Brick DeepCopy()
         {
             Brick outputBrick = (Brick)MemberwiseClone();
-            outputBrick.shape = (int[,])shape.Clone();
+            outputBrick.Shape = (int[,])Shape.Clone();
             return outputBrick;
         }
     }

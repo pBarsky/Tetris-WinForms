@@ -10,7 +10,7 @@ namespace GameEngine.Bricks
             {
                 for (int j = 0; j < size; j++)
                 {
-                    shape[i, j] = 1;
+                    Shape[i, j] = 1;
                 }
             }
         }

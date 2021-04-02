@@ -12,11 +12,11 @@ namespace GameEngine.Boards
 
         private void prepareTestingBoard()
         {
-            tab[0, 5] = 2;
-            tab[1, 5] = 2;
-            tab[2, 5] = 2;
-            tab[3, 5] = 2;
-            tab[4, 5] = 2;
+            Tab[0, 5] = 2;
+            Tab[1, 5] = 2;
+            Tab[2, 5] = 2;
+            Tab[3, 5] = 2;
+            Tab[4, 5] = 2;
         }
 
         public bool BrickCollisionTestcase1()

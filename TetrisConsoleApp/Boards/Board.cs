@@ -4,17 +4,16 @@ namespace GameEngine.Boards
 {
     public class Board
     {
-        protected int[,] tab;
         public int Width { get; }
         public int Height { get; }
 
-        public int[,] Tab => tab;
+        public int[,] Tab { get; }
 
         public Board(int width = 10, int height = 20)
         {
             Width = width;
             Height = height;
-            tab = new int[height, width];
+            Tab = new int[height, width];
         }
 
         public void InsertBrick(Brick brick)
@@ -25,7 +24,7 @@ namespace GameEngine.Boards
                 {
                     if (brick.Shape[i, j] != 0)
                     {
-                        tab[brick.PosY + i, brick.PosX + j] = brick.Shape[i, j];
+                        Tab[brick.PosY + i, brick.PosX + j] = brick.Shape[i, j];
                     }
                 }
             }
@@ -37,7 +36,7 @@ namespace GameEngine.Boards
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    tab[i, j] = 0;
+                    Tab[i, j] = 0;
                 }
             }
         }
@@ -48,9 +47,9 @@ namespace GameEngine.Boards
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    if (tab[i, j] == 1)
+                    if (Tab[i, j] == 1)
                     {
-                        tab[i, j] = 0;
+                        Tab[i, j] = 0;
                     }
                 }
             }
@@ -71,7 +70,7 @@ namespace GameEngine.Boards
                        i + brick.PosY + offsetY >= Height ||
                        j + brick.PosX + offsetX < 0 ||
                        j + brick.PosX + offsetX >= Width ||
-                       tab[brick.PosY + offsetY + i, brick.PosX + offsetX + j] == 2)
+                       Tab[brick.PosY + offsetY + i, brick.PosX + offsetX + j] == 2)
                     {
                         return true;
                     }
@@ -89,7 +88,7 @@ namespace GameEngine.Boards
                 {
                     if (brick.Shape[i, j] != 0)
                     {
-                        tab[brick.PosY + i, brick.PosX + j] = 2;
+                        Tab[brick.PosY + i, brick.PosX + j] = 2;
                     }
                 }
             }
@@ -102,7 +101,7 @@ namespace GameEngine.Boards
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    if (tab[i, j] != 2)
+                    if (Tab[i, j] != 2)
                     {
                         break;
                     }
@@ -125,19 +124,23 @@ namespace GameEngine.Boards
             int score = 1;
             while (level != -1)
             {
-                for (int i = level - 1; i >= 0; i--)
-                {
-                    for (int j = 0; j < Width; j++)
-                    {
-                        tab[i + 1, j] = tab[i, j];
-                    }
-                }
-
+                MoveDown(level);
                 level = CheckBoard();
                 score *= multiplier;
                 multiplier++;
             }
             return score;
+        }
+
+        private void MoveDown(int level)
+        {
+            for (int i = level - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    Tab[i + 1, j] = Tab[i, j];
+                }
+            }
         }
     }
 }
