@@ -13,15 +13,25 @@ namespace GameEngine
     public class Game
     {
         public readonly ScoreWriter ScoreWriter;
-        public bool Alive { get; private set; } = true;
-        public bool HasChanged { get; set; }
-        private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        public int Score { get; set; }
-        private static List<Brick> _allAvailableBricks;
+        private static List<Type> _allAvailableBricks;
         private readonly InputHandler _inputHandler;
-        public BricksQueue QueueBricks { get; } = new BricksQueue();
-        public Brick CurrentBrick { set; get; }
+        private readonly Random _random = new Random(DateTime.Now.Millisecond);
+
+        public Game(int boardHeight = 20, int boardWidth = 10)
+        {
+            Board = new Board(boardWidth, boardHeight);
+            var brickTypes = typeof(Brick).Assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(Brick)))
+                .Select(t => t);
+            _allAvailableBricks = brickTypes.ToList();
+            ScoreWriter = new ScoreWriter();
+            _inputHandler = new InputHandler(this);
+        }
+
+        public bool Alive { get; private set; } = true;
         public Board Board { get; }
+        public Brick CurrentBrick { set; get; }
+        public bool HasChanged { get; set; }
 
         public string[] HelpStrings { get; } =
         {
@@ -29,21 +39,33 @@ namespace GameEngine
             $"{"LeftArrow",-10} -> MOVE LEFT", $"{"RightArrow",-10} -> MOVE RIGHT", $"{"ESC",-10} -> GIVE UP"
         };
 
-        public Game(int boardHeight = 20, int boardWidth = 10)
+        public BricksQueue QueueBricks { get; } = new BricksQueue();
+        public int Score { get; set; }
+
+        public void NextBrick()
         {
-            Board = new Board(boardWidth, boardHeight);
-            IEnumerable<Brick> bricks = typeof(Brick).Assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(Brick)))
-                .Select(t => (Brick)Activator.CreateInstance(t));
-            _allAvailableBricks = bricks.ToList();
-            ScoreWriter = new ScoreWriter();
-            _inputHandler = new InputHandler(this);
+            CurrentBrick = QueueBricks.Dequeue();
+            EnqueueNewBrick();
+            CurrentBrick.RestartPosition(_random.Next(Board.Width - CurrentBrick.Width));
+            if (Board.IsColliding(CurrentBrick, 0, 0))
+            {
+                Alive = false;
+            }
         }
 
         public void Prepare()
         {
             SeedQueue();
             NextBrick();
+        }
+
+        public void RestartGame()
+        {
+            Score = 0;
+            Alive = true;
+            Board.DeepClear();
+            QueueBricks.Clear();
+            Prepare();
         }
 
         public Board Step(bool down, KeyCommand key)
@@ -57,13 +79,11 @@ namespace GameEngine
             return Board;
         }
 
-        public void RestartGame()
+        private void EnqueueNewBrick()
         {
-            Score = 0;
-            Alive = true;
-            Board.DeepClear();
-            QueueBricks.Clear();
-            Prepare();
+            var randomBrick = _allAvailableBricks[_random.Next(_allAvailableBricks.Count)];
+            var brick = (Brick)Activator.CreateInstance(randomBrick);
+            QueueBricks.Enqueue(brick);
         }
 
         private void HandlePlayerMovement(KeyCommand direction, bool fastForward = false)
@@ -92,28 +112,12 @@ namespace GameEngine
             }
         }
 
-        public void NextBrick()
-        {
-            CurrentBrick = QueueBricks.Dequeue();
-            EnqueueNewBrick();
-            CurrentBrick.RestartPosition(_random.Next(Board.Width - CurrentBrick.Width));
-            if (Board.IsColliding(CurrentBrick, 0, 0))
-            {
-                Alive = false;
-            }
-        }
-
         private void SeedQueue(int size = 3)
         {
-            for (int i = 0; i < size; i++)
+            for (var i = 0; i < size; i++)
             {
                 EnqueueNewBrick();
             }
-        }
-
-        private void EnqueueNewBrick()
-        {
-            QueueBricks.Enqueue(_allAvailableBricks[_random.Next(_allAvailableBricks.Count)].DeepCopy());
         }
     }
 }

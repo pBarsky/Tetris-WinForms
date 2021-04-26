@@ -79,11 +79,11 @@
   <ItemGroup>
     <Compile Include="Bricks\BeamBrick.cs" />
     <Compile Include="Boards\Board.cs" />
-    <Compile Include="Boards\BoardTester.cs" />
     <Compile Include="AbstractClasses\Brick.cs" />
     <Compile Include="Bricks\BricksQueue.cs" />
     <Compile Include="Bricks\ElBrick.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Utilities\EngineColor.cs" />
     <Compile Include="Utilities\InputHandler.cs" />
     <Compile Include="Utilities\KeyboardHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

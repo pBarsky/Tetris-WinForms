@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utilities\Colors\ColorHandler.cs" />
+    <Compile Include="Utilities\Colors\HSLColor.cs" />
     <Compile Include="Views\BasicForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -7,36 +7,16 @@ namespace GameEngine.Bricks
 {
     public class BricksQueue : IEnumerable<Brick>
     {
-        public Queue<Brick> BricksQueue1 { get; }
-
-        public string[] Buffer
-        {
-            get
-            {
-                int height = BricksQueue1.Sum(brick => brick.Height) + BricksQueue1.Count;
-                string[] buffer = new string[height];
-                int lineCounter = 0;
-                int brickCounter = 0;
-                foreach (Brick brick in BricksQueue1)
-                {
-                    buffer[lineCounter++] = $"Brick {++brickCounter}.:";
-                    foreach (string s in brick.Buffer)
-                    {
-                        buffer[lineCounter++] = '\t' + s;
-                    }
-                }
-                return buffer;
-            }
-        }
-
         public BricksQueue()
         {
             BricksQueue1 = new Queue<Brick>();
         }
 
-        public void Enqueue(Brick brick)
+        public Queue<Brick> BricksQueue1 { get; }
+
+        public void Clear()
         {
-            BricksQueue1.Enqueue(brick);
+            BricksQueue1.Clear();
         }
 
         public Brick Dequeue()
@@ -44,9 +24,9 @@ namespace GameEngine.Bricks
             return BricksQueue1.Dequeue();
         }
 
-        public void Clear()
+        public void Enqueue(Brick brick)
         {
-            BricksQueue1.Clear();
+            BricksQueue1.Enqueue(brick);
         }
 
         public IEnumerator<Brick> GetEnumerator()

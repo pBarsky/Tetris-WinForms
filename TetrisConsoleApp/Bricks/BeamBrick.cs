@@ -1,4 +1,6 @@
-﻿using GameEngine.AbstractClasses;
+﻿using System;
+using GameEngine.AbstractClasses;
+using GameEngine.Utilities;
 
 namespace GameEngine.Bricks
 {
@@ -8,7 +10,7 @@ namespace GameEngine.Bricks
         {
             for (int i = 0; i < size; i++)
             {
-                Shape[size / 2, i] = 1;
+                Shape[size / 2, i] = (1, Color);
             }
         }
 
