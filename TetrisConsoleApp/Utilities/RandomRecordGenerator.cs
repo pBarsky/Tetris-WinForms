@@ -4,8 +4,6 @@ namespace GameEngine.Utilities
 {
     public static class RandomRecordGenerator
     {
-        private static readonly Random Random = new Random(DateTime.Now.Millisecond);
-
         private static readonly string[] Names =
         {
             "Sachi", "Derwood", "Zug", "Casey", "Goggin", "Vanni", "Gould", "Centeno", "Janette", "Eliseo", "Nevlin",
@@ -29,6 +27,8 @@ namespace GameEngine.Utilities
             "Welby", "Lodmilla", "Petuu", "Scheider", "Rhea", "Artamas", "Leggat", "Glenda", "Duleba", "Lorollas",
             "Katzir", "Cyndia", "Greff", "Orion", "Almeria"
         };
+
+        private static readonly Random Random = new Random(DateTime.Now.Millisecond);
 
         public static Record GenerateRandomRecord()
         {
