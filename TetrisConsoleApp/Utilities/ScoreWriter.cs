@@ -8,14 +8,6 @@ namespace GameEngine.Utilities
     {
         private const string FilePath = @".\scores.txt";
 
-        public void SaveScore(string name, int score)
-        {
-            using (var streamWriter = new StreamWriter(FilePath, true))
-            {
-                streamWriter.WriteLine($"{SanitizeInput(name)}: {score}");
-            }
-        }
-
         public static void SaveScore(ICollection<Record> records)
         {
             using (var streamWriter = new StreamWriter(FilePath, true))
@@ -24,6 +16,14 @@ namespace GameEngine.Utilities
                 {
                     streamWriter.WriteLine($"{SanitizeInput(name)}: {score}");
                 }
+            }
+        }
+
+        public void SaveScore(string name, int score)
+        {
+            using (var streamWriter = new StreamWriter(FilePath, true))
+            {
+                streamWriter.WriteLine($"{SanitizeInput(name)}: {score}");
             }
         }
 

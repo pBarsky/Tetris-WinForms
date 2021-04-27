@@ -10,6 +10,9 @@ namespace GameEngine.Utilities
         public string Name;
         public int Score;
 
+        public string Item1 => Name;
+        public int Item2 => Score;
+
         public void Deconstruct(out string name, out int score)
         {
             name = Name;
@@ -19,7 +22,6 @@ namespace GameEngine.Utilities
 
     public class ScoreboardManager
     {
-        public List<Record> Records { get; private set; }
         private const string FilePath = @".\scores.txt";
 
         public ScoreboardManager(bool readData = true)
@@ -28,6 +30,20 @@ namespace GameEngine.Utilities
             {
                 RefreshData();
             }
+        }
+
+        public List<Record> Records { get; private set; }
+
+        private static Record ParseLine(string line)
+        {
+            var keyVal = line.Split(':');
+            var parsedScore = ParseRawScore(keyVal[1]);
+            return new Record { Name = keyVal[0], Score = parsedScore };
+        }
+
+        private static int ParseRawScore(string value)
+        {
+            return int.TryParse(value, out var rawScore) ? rawScore : 0;
         }
 
         private static List<Record> ReadScores(bool sorted = true)
@@ -59,18 +75,6 @@ namespace GameEngine.Utilities
                 var parsedRecord = ParseLine(line);
                 scores.Add(parsedRecord);
             }
-        }
-
-        private static Record ParseLine(string line)
-        {
-            var keyVal = line.Split(':');
-            var parsedScore = ParseRawScore(keyVal[1]);
-            return new Record { Name = keyVal[0], Score = parsedScore };
-        }
-
-        private static int ParseRawScore(string value)
-        {
-            return int.TryParse(value, out var rawScore) ? rawScore : 0;
         }
 
         private static void Seed(ICollection<Record> scores, int noOfRows)
